@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPA ক্যালকুলেটর</title>
+<style>
+  /* Gradient Background */
+  body{
+    font-family:sans-serif;
+    background: linear-gradient(135deg,#ffdde1,#ee9ca7);
+    padding:20px;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  /* Main Container */
+  .container{
+    max-width:650px;
+    width:100%;
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 1s ease;
+  }
+  .container:hover{
+    transform: scale(1.02);
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  }
+
+  /* Heading */
+  h1{
+    text-align:center;
+    color:#ff4f8b;
+    margin-bottom:20px;
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:1px;
+    animation: slideDown 1s ease;
+  }
+
+  /* Table wrapper */
+  .table-wrapper{overflow-x:auto;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:15px;
+    min-width:400px;
+  }
+  th, td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+    font-size:15px;
+    transition: background 0.3s ease;
+  }
+  th{
+    background:#ff4f8b;
+    color:#fff;
+  }
+  tr:hover td{
+    background:#fff0f5;
+  }
+
+  input[type=number], input[type=text]{
+    width:110px;
+    padding:7px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    text-align:center;
+    font-size:14px;
+    transition: all 0.3s ease;
+  }
+  input[type=text]{text-align:left;}
+  input:focus{
+    border-color:#ff4f8b;
+    box-shadow:0 0 6px rgba(255,79,139,0.5);
+    outline:none;
+  }
+
+  /* Buttons */
+  .btn-group{text-align:center;}
+  button{
+    background: linear-gradient(45deg,#ff6fa3,#ff4f8b);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:25px;
+    cursor:pointer;
+    font-size:15px;
+    margin:8px;
+    display:inline-block;
+    width:auto;
+    font-weight:bold;
+    transition: all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  button:hover{
+    background: linear-gradient(45deg,#ff4f8b,#ff6fa3);
+    transform: translateY(-2px);
+    box-shadow:0 5px 15px rgba(255,79,139,0.4);
+  }
+
+  /* Result */
+  .result{
+    margin-top:20px;
+    text-align:center;
+    font-size:17px;
+    font-weight:bold;
+    color:#333;
+    white-space:pre-line;
+    opacity:0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay:0.2s;
+  }
+
+  /* Animations */
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes slideDown{
+    from{opacity:0;transform:translateY(-20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>✨ GPA ক্যালকুলেটর ✨</h1>
+
+  <form id="gpaForm">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>বিষয়</th>
+            <th>পূর্ণ মার্কস</th>
+            <th>আপনার মার্কস</th>
+          </tr>
+        </thead>
+        <tbody id="subjectTable">
+          <tr>
+            <td><input type="text" placeholder="সাবজেক্ট ১" required></td>
+            <td><input type="number" placeholder="100" min="1" required></td>
+            <td><input type="number" placeholder="0" min="0" required></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-group">
+      <button type="button" id="addSubject">+ সাবজেক্ট যোগ করুন</button>
+      <button type="submit">📊 GPA হিসাব করুন</button>
+    </div>
+  </form>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const subjectTable = document.getElementById('subjectTable');
+const addSubjectBtn = document.getElementById('addSubject');
+const gpaForm = document.getElementById('gpaForm');
+const resultDiv = document.getElementById('result');
+
+// সাবজেক্ট যোগ করার বাটন
+addSubjectBtn.addEventListener('click', () => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" placeholder="সাবজেক্ট নাম" required></td>
+    <td><input type="number" placeholder="100" min="1" required></td>
+    <td><input type="number" placeholder="0" min="0" required></td>
+  `;
+  subjectTable.appendChild(tr);
+});
+
+// GPA হিসাব করার ফাংশন
+gpaForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const rows = subjectTable.querySelectorAll('tr');
+  let totalGpa=0;
+  let count=0;
+  let message = '';
+
+  rows.forEach((row)=>{
+    const inputs = row.querySelectorAll('input');
+    const name = inputs[0].value;
+    const fullMark = parseFloat(inputs[1].value);
+    const obtained = parseFloat(inputs[2].value);
+    if(isNaN(fullMark) || isNaN(obtained) || fullMark <=0 || obtained <0){
+      message += `${name} এ ভুল ইনপুট\n`;
+      return;
+    }
+    const percent = (obtained/fullMark)*100;
+    let gpa=0;
+    let grade='';
+    if(percent>=80){ gpa=5; grade='A+';}
+    else if(percent>=70){ gpa=4; grade='A';}
+    else if(percent>=60){ gpa=3.5; grade='A-';}
+    else if(percent>=50){ gpa=3; grade='B';}
+    else if(percent>=40){ gpa=2; grade='C';}
+    else if(percent>=33){ gpa=1; grade='D';}
+    else{ gpa=0; grade='F';}
+
+    totalGpa += gpa;
+    count++;
+    message += `${name}: GPA ${gpa} → Grade ${grade}\n`;
+  });
+
+  const finalGpa = (totalGpa/count).toFixed(2);
+  message += `\n🎯 মোট GPA: ${finalGpa}`;
+  resultDiv.textContent = message;
+});
+</script>
+
+</body>
+  </html>
