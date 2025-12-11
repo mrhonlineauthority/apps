@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.R.H Press Notification</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: "Noto Sans Bengali", sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ff66b3;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    input, button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    input:focus {
+      border-color: #ff66b3;
+    }
+    button {
+      background: #ff66b3;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff3385;
+    }
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #ff66b3;
+      color: white;
+    }
+    tr:hover {
+      background: #f1f1f1;
+    }
+    .download-btn {
+      background: #28a745;
+      color: white;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .download-btn i {
+      margin-right: 5px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      gap: 5px;
+    }
+    .pagination button {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      background: Black;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .pagination button.active {
+      background: #ff66b3;
+      color: white;
+      border: none;
+    }
+  </style>
+
+</head>
+<body>
+
+  <header>M.R.H Press Notification</header>
+
+  <div class="search-container">
+    <input type="date" id="searchDate">
+    <input type="text" id="searchSubject" placeholder="বিষয় লিখুন">
+    <button onclick="searchData()"><i class="fa fa-search"></i> সার্চ</button>
+  </div>
+
+  <table id="pressTable">
+    <thead>
+      <tr>
+        <th>তারিখ</th>
+        <th>বিষয়</th>
+        <th>বিবরণ</th>
+        <th>ডাউনলোড</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- ডেটা এখানে আসবে -->
+    </tbody>
+  </table>
+
+  <div class="pagination" id="pagination"></div>
+
+  <script>
+    // ================================
+    //   তোমার प्रेस বিজ্ঞপ্তির তথ্য
+    // ================================
+    const pressData = [
+
+      // ⭐ তোমার দেওয়া নতুন তথ্য যোগ করা হলো
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      }, 
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "*****"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "https://drive.google.com/yourpdf1"
+      },
+      {
+        date: "......",
+        subject: "...",
+        description: "...",
+        pdf: "https://drive.google.com/yourpdf1"
+      },
+      {
+        date: "2025-11-22",
+        subject: "বাংলাদেশে ভূমি কম্পন অনুভূত।",
+        description: "২২/১১/২০২৫ তারিখ সন্ধ্যা ০৫:০৬ মিনিটের ভূমিকম্পের জরুরি বিজ্ঞপ্তি! ",
+        pdf: "https://drive.google.com/file/d/1QZz7IH-9g-4F1drPWtT2xpT9bbRXCW3D/view?usp=drivesdk"
+      },
+      {
+        date: "2025-11-21",
+        subject: "বাংলাদেশে ভুমিকস্পন অনুভুত।",
+        description: "২১/১১/২০২৫ সকাল ১০:৩৮ মিনিটের ভূমি কম্পের বিজ্ঞপ্তি!",
+        pdf: "https://drive.google.com/file/d/1TMzKtewuCrwM41C47p8hIjluC2luta5D/view?usp=drivesdk"
+      }
+    ];
+
+    const rowsPerPage = 10;
+    let currentPage = 1;
+
+    function renderTable(data) {
+      const tableBody = document.getElementById('tableBody');
+      tableBody.innerHTML = "";
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedData = data.slice(start, end);
+
+      paginatedData.forEach(item => {
+        const row = `
+          <tr>
+            <td>${item.date}</td>
+            <td>${item.subject}</td>
+            <td>${item.description}</td>
+            <td><button class="download-btn" onclick="window.open('${item.pdf}', '_blank')">
+              <i class="fa fa-download"></i> PDF
+            </button></td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+      renderPagination(data.length);
+    }
+
+    function renderPagination(totalItems) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = "";
+      const totalPages = Math.ceil(totalItems / rowsPerPage);
+      for (let i = 1; i <= totalPages; i++) {
+        if (i > 10 && i !== totalPages) {
+          if (i === 11) pagination.innerHTML += `<span>...</span>`;
+          continue;
+        }
+        pagination.innerHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+      }
+    }
+
+    function changePage(page) {
+      currentPage = page;
+      renderTable(filteredData);
+    }
+
+    function searchData() {
+      const date = document.getElementById('searchDate').value;
+      const subject = document.getElementById('searchSubject').value.toLowerCase();
+      filteredData = pressData.filter(item =>
+        (!date || item.date === date) &&
+        (!subject || item.subject.toLowerCase().includes(subject))
+      );
+      currentPage = 1;
+      renderTable(filteredData);
+    }
+
+    let filteredData = pressData;
+    renderTable(filteredData);
+  </script>
+
+</body>
+</html>
