@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.R.H Student App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* হেডার স্টাইল */
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #1a237e;
+            font-weight: bold;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .main-logo {
+            height: 65px;
+            width: 65px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .app-title {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            margin-left: 15px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* পেজ কন্টেন্ট */
+        .page {
+            display: none;
+            flex: 1;
+            animation: fadeIn 0.5s ease;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* হোম পেজ কন্টেন্ট */
+        .main-image-container {
+            width: 92%;
+            height: 190px;
+            overflow: hidden;
+            position: relative;
+            margin: 18px auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            border: 4px solid white;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* ফিচার সেকশন */
+        .features-section {
+            padding: 0 18px;
+            margin-bottom: 30px;
+        }
+        
+        .features-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .feature-btn {
+            flex: 1;
+            margin: 0 5px;
+            background: white;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 6px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 105px;
+            text-decoration: none;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1a237e, #283593);
+        }
+        
+        .feature-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+            background: #f8f9fa;
+        }
+        
+        .feature-btn i {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .feature-btn span {
+            line-height: 1.3;
+            padding: 0 5px;
+            font-size: 13.5px;
+        }
+        
+        /* এবাউট পেজ */
+        .about-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            min-height: calc(100vh - 280px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .about-content h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8eaf6;
+            text-align: center;
+        }
+        
+        .about-content p {
+            line-height: 1.7;
+            margin-bottom: 18px;
+            color: #444;
+            font-size: 16px;
+        }
+        
+        .about-content .highlight {
+            background: #e8eaf6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #1a237e;
+        }
+        
+        .developer-info {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        
+        .developer-info-text {
+            flex: 1;
+        }
+        
+        .developer-info strong {
+            color: #1a237e;
+        }
+        
+        .developer-image {
+            width: 120px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border: 2px solid #1a237e;
+        }
+        
+        .developer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .about-footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* হেল্প পেজ */
+        .help-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+            min-height: calc(100vh - 280px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .help-content h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8eaf6;
+            text-align: center;
+        }
+        
+        .help-content p {
+            line-height: 1.7;
+            margin-bottom: 18px;
+            color: #444;
+            font-size: 16px;
+        }
+        
+        .help-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .help-option {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 4px solid #1a237e;
+        }
+        
+        .help-option h3 {
+            color: #1a237e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .help-option h3 i {
+            margin-right: 10px;
+        }
+        
+        .help-option p {
+            margin-bottom: 0;
+            color: #555;
+        }
+        
+        .help-line-btn-container {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .help-line-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .help-line-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(26, 35, 126, 0.4);
+        }
+        
+        .help-line-btn i {
+            margin-right: 10px;
+        }
+        
+        .help-footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* নেভিগেশন বার */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 0;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.12);
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            padding: 6px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            color: #1a237e;
+            background-color: #e8eaf6;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn i {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        
+        /* স্ক্রলবার স্টাইল */
+        .page::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .page::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .page::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+        
+        .page::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+        
+        /* আইকন রং */
+        .feature-btn:nth-child(1) i { color: #2196F3; }
+        .feature-btn:nth-child(2) i { color: #4CAF50; }
+        .feature-btn:nth-child(3) i { color: #FF9800; }
+        .feature-btn:nth-child(4) i { color: #9C27B0; }
+        .feature-btn:nth-child(5) i { color: #F44336; }
+        .feature-btn:nth-child(6) i { color: #009688; }
+        
+        /* মোবাইল রেস্পন্সিভ */
+        @media (max-width: 380px) {
+            .app-title {
+                font-size: 22px;
+                margin-left: 12px;
+            }
+            
+            .main-logo {
+                height: 55px;
+                width: 55px;
+            }
+            
+            .feature-btn span {
+                font-size: 12.5px;
+            }
+            
+            .feature-btn i {
+                font-size: 26px;
+            }
+            
+            .about-content, .help-content {
+                padding: 20px;
+                margin: 15px;
+            }
+            
+            .help-line-btn {
+                padding: 14px 25px;
+                font-size: 16px;
+            }
+            
+            .developer-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .developer-image {
+                width: 100px;
+                height: 125px;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- হেডার অংশ -->
+    <div class="header">
+        <div class="header-top">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="bn">বাংলা</button>
+            </div>
+        </div>
+        <div class="logo-container">
+            <img src="https://mrhonlineauthority.github.io/ebent/mrhlogo.png" alt="M.R.H Logo" class="main-logo">
+            <div class="app-title" data-i18n="app_title">M.R.H Student App</div>
+        </div>
+    </div>
+    
+    <!-- হোম পেজ -->
+    <div id="home-page" class="page active">
+        <div class="main-image-container">
+            <img src="https://mrhonlineauthority.github.io/ebent/logo.png" alt="App Main Image" class="main-image">
+        </div>
+        
+        <div class="features-section">
+            <div class="features-row">
+                <a href="#" class="feature-btn" data-link="registration-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span data-i18n="feature_registration">Students Registration</span>
+                </a>
+                
+                <a href="#" class="feature-btn" data-link="account-link">
+                    <i class="fas fa-user-circle"></i>
+                    <span data-i18n="feature_account">Student Account</span>
+                </a>
+                
+                <a href="#" class="feature-btn" data-link="result-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span data-i18n="feature_result">Result Check</span>
+                </a>
+            </div>
+            
+            <div class="features-row">
+                <a href="#" class="feature-btn" data-link="press-link">
+                    <i class="fas fa-bell"></i>
+                    <span data-i18n="feature_press">Press Notification</span>
+                </a>
+                
+                <a href="#" class="feature-btn" data-link="vip-link">
+                    <i class="fas fa-crown"></i>
+                    <span data-i18n="feature_vip">VIP Account</span>
+                </a>
+                
+                <a href="#" class="feature-btn" data-link="mcq-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span data-i18n="feature_mcq">M.C.Q Exam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- এবাউট পেজ -->
+    <div id="about-page" class="page">
+        <div class="about-content">
+            <h2 data-i18n="about_title">About M.R.H Student App</h2>
+            
+            <p data-i18n="about_paragraph1">Welcome to the <strong>M.R.H Student App</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.</p>
+            
+            <div class="highlight">
+                <p data-i18n="about_mission"><strong>Mission:</strong> To revolutionize the student experience by integrating cutting-edge technology with education, making academic management more accessible, efficient, and user-friendly for students everywhere.</p>
+            </div>
+            
+            <p data-i18n="about_paragraph2">The app offers a wide range of features including student registration, account management, result checking, notifications, VIP services, and MCQ exam preparation. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.</p>
+            
+            <p data-i18n="about_paragraph3">Our platform is constantly evolving with regular updates and new features based on user feedback. We are committed to providing the best possible experience for students and educators alike.</p>
+            
+            <div class="developer-info">
+                <div class="developer-info-text">
+                    <strong data-i18n="developer_authority">M.R.H Online Authority</strong><br>
+                    <strong data-i18n="developer_version">Version:</strong> 1.0.0<br>
+                    <strong data-i18n="developer_date">Release Date:</strong> December 2025<br>
+                    <strong data-i18n="developer_creator">Creator:</strong> RIYAD HASSAN
+                </div>
+                
+                <div class="developer-image">
+                    <img src="https://mrhonlineauthority.github.io/ebent/riyad.png" alt="RIYAD HASSAN">
+                </div>
+            </div>
+            
+            <div class="about-footer">
+                <span data-i18n="footer_copyright">M.R.H Student App © 2025 | All Rights Reserved</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- হেল্প পেজ -->
+    <div id="help-page" class="page">
+        <div class="help-content">
+            <h2 data-i18n="help_title">Help & Support</h2>
+            
+            <p data-i18n="help_paragraph1">We are here to help you get the most out of the MRH Student App. If you encounter any problems or have any questions about using the app, please click the Contact Help Line button below.</p>
+            
+            <p data-i18n="help_paragraph2">For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the app.</p>
+            
+            <div class="help-line-btn-container">
+                <button id="help-line-btn" class="help-line-btn">
+                    <i class="fas fa-headset"></i> <span data-i18n="help_button">Contact Help Line</span>
+                </button>
+            </div>
+            
+            <div class="help-footer">
+                <span data-i18n="footer_copyright">M.R.H Student App © 2025 | All Rights Reserved</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- নেভিগেশন বার -->
+    <div class="nav-bar">
+        <a href="#" class="nav-btn active" data-page="home-page">
+            <i class="fas fa-home"></i>
+            <span data-i18n="nav_home">Home</span>
+        </a>
+        
+        <a href="#" class="nav-btn" data-page="about-page">
+            <i class="fas fa-info-circle"></i>
+            <span data-i18n="nav_about">About</span>
+        </a>
+        
+        <a href="#" class="nav-btn" data-page="help-page">
+            <i class="fas fa-headset"></i>
+            <span data-i18n="nav_help">Help</span>
+        </a>
+    </div>
+
+    <script>
+        // ভাষা ডেটা
+        const translations = {
+            en: {
+                // সাধারণ
+                "app_title": "M.R.H Student App",
+                "footer_copyright": "M.R.H Student App © 2025 | All Rights Reserved",
+                
+                // নেভিগেশন
+                "nav_home": "Home",
+                "nav_about": "About",
+                "nav_help": "Help",
+                
+                // ফিচার বাটন
+                "feature_registration": "Students Registration",
+                "feature_account": "Student Account",
+                "feature_result": "Result Check",
+                "feature_press": "Press Notification",
+                "feature_vip": "VIP Account",
+                "feature_mcq": "M.C.Q Exam",
+                
+                // এবাউট পেজ
+                "about_title": "About M.R.H Student App",
+                "about_paragraph1": "Welcome to the <strong>M.R.H Student App</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.",
+                "about_mission": "<strong>Mission:</strong> To revolutionize the student experience by integrating cutting-edge technology with education, making academic management more accessible, efficient, and user-friendly for students everywhere.",
+                "about_paragraph2": "The app offers a wide range of features including student registration, account management, result checking, notifications, VIP services, and MCQ exam preparation. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.",
+                "about_paragraph3": "Our platform is constantly evolving with regular updates and new features based on user feedback. We are committed to providing the best possible experience for students and educators alike.",
+                "developer_authority": "M.R.H Online Authority",
+                "developer_version": "Version:",
+                "developer_date": "Release Date:",
+                "developer_creator": "Creator:",
+                
+                // হেল্প পেজ
+                "help_title": "Help & Support",
+                "help_paragraph1": "We are here to help you get the most out of the MRH Student App. If you encounter any problems or have any questions about using the app, please click the Contact Help Line button below.",
+                "help_paragraph2": "For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the app.",
+                "help_button": "Contact Help Line",
+                
+                // এলার্ট বার্তা
+                "link_not_added": "The link for \"{feature}\" has not been added yet. Please contact the admin to add the link.",
+                "helpline_not_added": "Helpline link has not been added yet. Please contact the admin to add the link.",
+                "link_updated": "Link for \"{feature}\" has been successfully updated!",
+                "helpline_updated": "Helpline link has been successfully updated!"
+            },
+            bn: {
+                // সাধারণ
+                "app_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ",
+                "footer_copyright": "এম.আর.এইচ স্টুডেন্ট অ্যাপ © ২০২৫ | সর্বস্বত্ব সংরক্ষিত",
+                
+                // নেভিগেশন
+                "nav_home": "হোম",
+                "nav_about": "সম্পর্কে",
+                "nav_help": "সহায়তা",
+                
+                // ফিচার বাটন
+                "feature_registration": "ছাত্র নিবন্ধন",
+                "feature_account": "ছাত্র অ্যাকাউন্ট",
+                "feature_result": "ফলাফল দেখুন",
+                "feature_press": "প্রেস বিজ্ঞপ্তি",
+                "feature_vip": "ভিআইপি অ্যাকাউন্ট",
+                "feature_mcq": "এম.সি.কিউ পরীক্ষা",
+                
+                // এবাউট পেজ
+                "about_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ সম্পর্কে",
+                "about_paragraph1": "<strong>এম.আর.এইচ স্টুডেন্ট অ্যাপ</strong>-এ স্বাগতম, একটি সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম যা বিশেষভাবে শিক্ষার্থীদের তাদের একাডেমিক যাত্রা দক্ষতার সাথে পরিচালনা করার জন্য ডিজাইন করা হয়েছে। আমাদের অ্যাপ্লিকেশন একটি সুবিধাজনক জায়গায় সমস্ত প্রয়োজনীয় একাডেমিক সরঞ্জাম এবং সম্পদ একত্রিত করে।",
+                "about_mission": "<strong>মিশন:</strong> শিক্ষাকে অত্যাধুনিক প্রযুক্তির সাথে একীভূত করে শিক্ষার্থীর অভিজ্ঞতা বিপ্লবী করতে, যাতে একাডেমিক ব্যবস্থাপনা সর্বত্র শিক্ষার্থীদের জন্য আরও প্রবেশযোগ্য, দক্ষ এবং ব্যবহারকারী-বান্ধব হয়।",
+                "about_paragraph2": "অ্যাপটি শিক্ষার্থী নিবন্ধন, অ্যাকাউন্ট ব্যবস্থাপনা, ফলাফল পরীক্ষা, বিজ্ঞপ্তি, ভিআইপি পরিষেবা এবং এমসিকিউ পরীক্ষার প্রস্তুতি সহ বিস্তৃত বৈশিষ্ট্য অফার করে। প্রতিটি বৈশিষ্ট্য শিক্ষার্থীদের চাহিদা মাথায় রেখে ডিজাইন করা হয়েছে, স্বজ্ঞাত ইন্টারফেস এবং নির্বিঘ্ন কার্যকারিতা প্রদান করে।",
+                "about_paragraph3": "ব্যবহারকারীদের প্রতিক্রিয়ার ভিত্তিতে নিয়মিত আপডেট এবং নতুন বৈশিষ্ট্যগুলির সাথে আমাদের প্ল্যাটফর্ম ক্রমাগত বিকশিত হচ্ছে। আমরা শিক্ষার্থী এবং শিক্ষক উভয়ের জন্য সর্বোত্তম সম্ভাব্য অভিজ্ঞতা প্রদানের জন্য প্রতিশ্রুতিবদ্ধ।",
+                "developer_authority": "এম.আর.এইচ অনলাইন অথরিটি",
+                "developer_version": "সংস্করণ:",
+                "developer_date": "মুক্তির তারিখ:",
+                "developer_creator": "স্রষ্টা:",
+                
+                // হেল্প পেজ
+                "help_title": "সহায়তা ও সমর্থন",
+                "help_paragraph1": "আমরা আপনাকে এম.আর.এইচ স্টুডেন্ট অ্যাপ থেকে সর্বাধিক সুবিধা পেতে সাহায্য করতে এখানে আছি। আপনি যদি অ্যাপটি ব্যবহার সম্পর্কিত কোন সমস্যার সম্মুখীন হন বা কোন প্রশ্ন থাকে, দয়া করে নিচের \"হেল্পলাইন যোগাযোগ করুন\" বাটনে ক্লিক করুন।",
+                "help_paragraph2": "সরাসরি সহায়তার জন্য, আপনি হেল্পলাইনের মাধ্যমে আমাদের সমর্থন টিমের সাথে যোগাযোগ করতে পারেন। আমাদের সমর্থন কর্মীরা অ্যাপ সম্পর্কিত আপনার যে কোন প্রশ্ন বা উদ্বেগের সমাধানে সহায়তা করার জন্য উপলব্ধ।",
+                "help_button": "হেল্পলাইন যোগাযোগ করুন",
+                
+                // এলার্ট বার্তা
+                "link_not_added": "\"{feature}\" এর লিংক এখনো যোগ করা হয়নি। লিংক যোগ করার জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।",
+                "helpline_not_added": "হেল্পলাইন লিংক এখনো যোগ করা হয়নি। লিংক যোগ করার জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।",
+                "link_updated": "\"{feature}\" এর লিংক সফলভাবে আপডেট করা হয়েছে!",
+                "helpline_updated": "হেল্পলাইন লিংক সফলভাবে আপডেট করা হয়েছে!"
+            }
+        };
+
+        // ফিচার বাটনের লিংক
+        const featureLinks = {
+            "registration-link": "https://mrhonlineauthority.github.io/studentsite/",
+            "account-link": "https://mrhonlineauthority.github.io/signuplogin/vipaccount.html",
+            "result-link": "https://mrhonlineauthority.github.io/studentsite/result.html",
+            "press-link": "https://mrhonlineauthority.github.io/apps/pressnotifecation.html",
+            "vip-link": "https://mrhonlineauthority.github.io/signuplogin/",
+            "mcq-link": "https://forms.gle/ZX25P9V3dZKZ3CDr9"
+        };
+        
+        // হেল্প লাইন লিংক
+        let helpLineLink = "https://mrhonlineauthority.github.io/mrhhelplinehome/";
+        
+        // বর্তমান ভাষা
+        let currentLang = 'en';
+        
+        // ভাষা পরিবর্তন ফাংশন
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // ভাষা বাটন আপডেট
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // সব টেক্সট আপডেট
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'SPAN' || element.tagName === 'DIV' || element.tagName === 'P' || element.tagName === 'H2') {
+                        element.innerHTML = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // লোকালস্টোরেজে সংরক্ষণ
+            localStorage.setItem('mrh_app_lang', lang);
+            
+            console.log(`🌐 Language changed to: ${lang === 'en' ? 'English' : 'বাংলা'}`);
+        }
+        
+        // ডকুমেন্ট লোড হলে
+        document.addEventListener('DOMContentLoaded', function() {
+            // লোকালস্টোরেজ থেকে ভাষা লোড
+            const savedLang = localStorage.getItem('mrh_app_lang');
+            if (savedLang && (savedLang === 'en' || savedLang === 'bn')) {
+                changeLanguage(savedLang);
+            }
+            
+            // ভাষা বাটন ইভেন্ট
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+            
+            // নেভিগেশন বাটন ইভেন্ট
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const pages = document.querySelectorAll('.page');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // অ্যাকটিভ ক্লাস আপডেট
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // পেজ আপডেট
+                    pages.forEach(page => page.classList.remove('active'));
+                    document.getElementById(targetPage).classList.add('active');
+                    
+                    // URL আপডেট (ব্রাউজার হিস্ট্রি জন্য)
+                    history.pushState(null, null, `#${targetPage}`);
+                });
+            });
+            
+            // ফিচার বাটন ইভেন্ট
+            const featureButtons = document.querySelectorAll('.feature-btn');
+            
+            featureButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const linkKey = this.getAttribute('data-link');
+                    
+                    if (featureLinks[linkKey] && featureLinks[linkKey] !== "#") {
+                        // লিংক থাকলে সেই লিংকে যাবে
+                        window.open(featureLinks[linkKey], '_blank');
+                    } else {
+                        // লিংক না থাকলে বার্তা দেখাবে
+                        e.preventDefault();
+                        const featureName = this.querySelector('span').textContent;
+                        const alertMessage = translations[currentLang]['link_not_added'].replace('{feature}', featureName);
+                        alert(alertMessage);
+                    }
+                });
+            });
+            
+            // হেল্প লাইন বাটন ইভেন্ট
+            const helpLineBtn = document.getElementById('help-line-btn');
+            
+            helpLineBtn.addEventListener('click', function() {
+                if (helpLineLink && helpLineLink !== "#") {
+                    // হেল্প লাইন লিংক থাকলে সেই লিংকে যাবে
+                    window.open(helpLineLink, '_blank');
+                } else {
+                    // হেল্প লাইন লিংক না থাকলে বার্তা দেখাবে
+                    alert(translations[currentLang]['helpline_not_added']);
+                }
+            });
+            
+            // ব্রাউজার ব্যাক/ফরোয়ার্ড বাটন হ্যান্ডেল
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.substring(1) || 'home-page';
+                
+                // নেভিগেশন বাটন আপডেট
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-page') === hash) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // পেজ আপডেট
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(hash).classList.add('active');
+            });
+            
+            // প্রারম্ভিক URL চেক
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash)) {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                pages.forEach(page => page.classList.remove('active'));
+                
+                document.querySelector(`.nav-btn[data-page="${initialHash}"]`).classList.add('active');
+                document.getElementById(initialHash).classList.add('active');
+            }
+            
+            // লিংক আপডেট করার জন্য ফাংশন
+            window.updateFeatureLink = function(featureKey, newLink) {
+                if (featureLinks.hasOwnProperty(featureKey)) {
+                    featureLinks[featureKey] = newLink;
+                    console.log(`✅ "${featureKey}" লিংক আপডেট হয়েছে: ${newLink}`);
+                    
+                    // সফলতা বার্তা
+                    const successMessage = translations[currentLang]['link_updated'].replace('{feature}', featureKey);
+                    alert(successMessage);
+                    return true;
+                }
+                console.error(`❌ "${featureKey}" নামে কোনো ফিচার নেই`);
+                alert(`❌ "${featureKey}" নামে কোনো ফিচার নেই`);
+                return false;
+            };
+            
+            // হেল্প লাইন লিংক আপডেট করার ফাংশন
+            window.updateHelpLineLink = function(newLink) {
+                helpLineLink = newLink;
+                console.log(`✅ হেল্পলাইন লিংক আপডেট হয়েছে: ${newLink}`);
+                
+                // সফলতা বার্তা
+                alert(translations[currentLang]['helpline_updated']);
+            };
+            
+            // প্রারম্ভিক বার্তা
+            console.log("🎓 M.R.H Student App লোড হয়েছে!");
+            console.log("🌐 ভাষা পরিবর্তন করতে উপরের বাটনে ক্লিক করুন");
+            console.log("🔗 ফিচার লাইন আপডেট করতে: updateFeatureLink('ফিচার-কী', 'আপনার-লিংক')");
+            console.log("📞 হেল্পলাইন লিংক আপডেট করতে: updateHelpLineLink('আপনার-হেল্প-লিংক')");
+            console.log("📋 ফিচার কী গুলো: registration-link, account-link, result-link, press-link, vip-link, mcq-link");
+            
+            // সবকিছু দেখা যাচ্ছে কিনা তা নিশ্চিত করা
+            setTimeout(function() {
+                const homePage = document.getElementById('home-page');
+                const aboutPage = document.getElementById('about-page');
+                const helpPage = document.getElementById('help-page');
+                
+                if (homePage.offsetHeight > 0 && aboutPage.offsetHeight > 0 && helpPage.offsetHeight > 0) {
+                    console.log("✅ সব পেজের কন্টেন্ট দেখা যাচ্ছে");
+                } else {
+                    console.log("⚠️ কিছু কন্টেন্ট দেখা যাচ্ছে না, স্ক্রল করুন");
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
