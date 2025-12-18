@@ -107,8 +107,8 @@
             to { opacity: 1; }
         }
         
-        /* হোম পেজ কন্টেন্ট */
-        .main-image-container {
+        /* ফেডিং ইমেজ কন্টেইনার */
+        .fading-image-container {
             width: 92%;
             height: 190px;
             overflow: hidden;
@@ -119,10 +119,20 @@
             border: 4px solid white;
         }
         
-        .main-image {
+        .fading-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            border-radius: 11px; /* Container border-radius minus border width */
+        }
+        
+        .fading-image.active {
+            opacity: 1;
         }
         
         /* ফিচার সেকশন */
@@ -482,6 +492,10 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            
+            .fading-image-container {
+                height: 170px;
+            }
         }
     </style>
 </head>
@@ -502,8 +516,13 @@
     
     <!-- হোম পেজ -->
     <div id="home-page" class="page active">
-        <div class="main-image-container">
-            <img src="https://mrhonlineauthority.github.io/ebent/logo.png" alt="App Main Image" class="main-image">
+        <!-- ফেডিং ইমেজ কন্টেইনার -->
+        <div class="fading-image-container">
+            <!-- প্রথম ইমেজ -->
+            <img src="https://mrhonlineauthority.github.io/ebent/logo.png" alt="App Main Image" class="fading-image active">
+            
+            <!-- দ্বিতীয় ইমেজ -->
+            <img src="https://mrhonlineauthority.github.io/ebent/nnsc.png" alt="App Secondary Image" class="fading-image">
         </div>
         
         <div class="features-section">
@@ -719,6 +738,36 @@
         // বর্তমান ভাষা
         let currentLang = 'en';
         
+        // ফেডিং ইমেজ কন্ট্রোল
+        let currentImageIndex = 0;
+        let imageFadeInterval;
+        const images = document.querySelectorAll('.fading-image');
+        
+        // ফেডিং ইমেজ ফাংশন
+        function startImageFading() {
+            // প্রতি ৩ সেকেন্ডে ইমেজ পরিবর্তন (৩ সেকেন্ড দেখানো + ১ সেকেন্ড ট্রানজিশন)
+            imageFadeInterval = setInterval(() => {
+                // বর্তমান ইমেজ ফেড আউট করুন
+                images[currentImageIndex].classList.remove('active');
+                
+                // পরবর্তী ইমেজ ইনডেক্স নির্ধারণ
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                
+                // ১ সেকেন্ড পর নতুন ইমেজ ফেড ইন করুন
+                setTimeout(() => {
+                    images[currentImageIndex].classList.add('active');
+                }, 1000);
+                
+            }, 4000); // মোট ৪ সেকেন্ড (৩ সেকেন্ড দেখানো + ১ সেকেন্ড ট্রানজিশন)
+        }
+        
+        // ইমেজ ফেডিং বন্ধ করা
+        function stopImageFading() {
+            if (imageFadeInterval) {
+                clearInterval(imageFadeInterval);
+            }
+        }
+        
         // ভাষা পরিবর্তন ফাংশন
         function changeLanguage(lang) {
             currentLang = lang;
@@ -756,6 +805,21 @@
             if (savedLang && (savedLang === 'en' || savedLang === 'bn')) {
                 changeLanguage(savedLang);
             }
+            
+            // ফেডিং ইমেজ শুরু করুন
+            startImageFading();
+            
+            // পেজ পরিবর্তন হলে ইমেজ ফেডিং কন্ট্রোল
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-page');
+                    if (targetPage === 'home-page') {
+                        startImageFading();
+                    } else {
+                        stopImageFading();
+                    }
+                });
+            });
             
             // ভাষা বাটন ইভেন্ট
             document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -836,6 +900,13 @@
                 // পেজ আপডেট
                 pages.forEach(page => page.classList.remove('active'));
                 document.getElementById(hash).classList.add('active');
+                
+                // হোম পেজে ফিরে আসলে ফেডিং শুরু করুন
+                if (hash === 'home-page') {
+                    startImageFading();
+                } else {
+                    stopImageFading();
+                }
             });
             
             // প্রারম্ভিক URL চেক
@@ -846,6 +917,11 @@
                 
                 document.querySelector(`.nav-btn[data-page="${initialHash}"]`).classList.add('active');
                 document.getElementById(initialHash).classList.add('active');
+                
+                // হোম পেজ না হলে ফেডিং বন্ধ করুন
+                if (initialHash !== 'home-page') {
+                    stopImageFading();
+                }
             }
             
             // লিংক আপডেট করার জন্য ফাংশন
@@ -873,11 +949,24 @@
                 alert(translations[currentLang]['helpline_updated']);
             };
             
+            // ফেডিং ইমেজ কন্ট্রোল ফাংশন
+            window.startImageFading = function() {
+                startImageFading();
+                console.log("🖼️ Image fading started");
+            };
+            
+            window.stopImageFading = function() {
+                stopImageFading();
+                console.log("🖼️ Image fading stopped");
+            };
+            
             // প্রারম্ভিক বার্তা
             console.log("🎓 M.R.H Student App লোড হয়েছে!");
+            console.log("🖼️ ফেডিং ইমেজ শুরু হয়েছে (৩ সেকেন্ড দেখানো, ১ সেকেন্ড ট্রানজিশন)");
             console.log("🌐 ভাষা পরিবর্তন করতে উপরের বাটনে ক্লিক করুন");
             console.log("🔗 ফিচার লাইন আপডেট করতে: updateFeatureLink('ফিচার-কী', 'আপনার-লিংক')");
             console.log("📞 হেল্পলাইন লিংক আপডেট করতে: updateHelpLineLink('আপনার-হেল্প-লিংক')");
+            console.log("🖼️ ইমেজ ফেডিং কন্ট্রোল: startImageFading(), stopImageFading()");
             console.log("📋 ফিচার কী গুলো: registration-link, account-link, result-link, press-link, vip-link, mcq-link");
             
             // সবকিছু দেখা যাচ্ছে কিনা তা নিশ্চিত করা
