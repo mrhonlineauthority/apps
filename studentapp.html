@@ -95,7 +95,7 @@
             flex: 1;
             animation: fadeIn 0.5s ease;
             overflow-y: auto;
-            padding-bottom: 20px;
+            padding-bottom: 100px;
         }
         
         .page.active {
@@ -169,6 +169,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            min-width: 0; /* Important for text truncation */
         }
         
         .feature-btn:before {
@@ -196,6 +197,23 @@
             line-height: 1.3;
             padding: 0 5px;
             font-size: 13.5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            max-width: 100%;
+        }
+        
+        /* দুইটি বাটনের সারির জন্য বিশেষ স্টাইল */
+        .two-buttons-row {
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .two-buttons-row .feature-btn {
+            flex: 0 1 calc(50% - 5px); /* দুইটি বাটন সমান সাইজে */
+            max-width: calc(50% - 5px); /* দুইটি বাটন সমান সাইজে */
         }
         
         /* এবাউট পেজ */
@@ -441,6 +459,8 @@
         .feature-btn:nth-child(4) i { color: #9C27B0; }
         .feature-btn:nth-child(5) i { color: #F44336; }
         .feature-btn:nth-child(6) i { color: #009688; }
+        .feature-btn:nth-child(7) i { color: #3F51B5; }
+        .feature-btn:nth-child(8) i { color: #E91E63; }
         
         /* মোবাইল রেস্পন্সিভ */
         @media (max-width: 380px) {
@@ -455,11 +475,11 @@
             }
             
             .feature-btn span {
-                font-size: 12.5px;
+                font-size: 12px;
             }
             
             .feature-btn i {
-                font-size: 26px;
+                font-size: 24px;
             }
             
             .about-content, .help-content {
@@ -495,6 +515,36 @@
             
             .fading-image-container {
                 height: 170px;
+            }
+            
+            .feature-btn {
+                margin: 0 3px;
+                padding: 12px 4px;
+                height: 95px;
+            }
+            
+            .two-buttons-row .feature-btn {
+                flex: 0 1 calc(50% - 6px);
+                max-width: calc(50% - 6px);
+            }
+            
+            .features-section {
+                padding: 0 12px;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .feature-btn span {
+                font-size: 11px;
+            }
+            
+            .feature-btn i {
+                font-size: 22px;
+            }
+            
+            .feature-btn {
+                height: 90px;
+                padding: 10px 3px;
             }
         }
     </style>
@@ -557,6 +607,19 @@
                 <a href="#" class="feature-btn" data-link="mcq-link">
                     <i class="fas fa-question-circle"></i>
                     <span data-i18n="feature_mcq">M.C.Q Exam</span>
+                </a>
+            </div>
+            
+            <!-- নতুন দুইটি বাটন যোগ করা হয়েছে - এখন পাশাপাশি -->
+            <div class="features-row two-buttons-row">
+                <a href="#" class="feature-btn" data-link="idcard-link">
+                    <i class="fas fa-id-card"></i>
+                    <span data-i18n="feature_idcard">ID Card Login</span>
+                </a>
+                
+                <a href="#" class="feature-btn" data-link="donation-link">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span data-i18n="feature_donation">Donation Now</span>
                 </a>
             </div>
         </div>
@@ -655,6 +718,8 @@
                 "feature_press": "Press Notification",
                 "feature_vip": "VIP Account",
                 "feature_mcq": "M.C.Q Exam",
+                "feature_idcard": "ID Card Login",
+                "feature_donation": "Donation Now",
                 
                 // এবাউট পেজ
                 "about_title": "About M.R.H Student App",
@@ -696,6 +761,8 @@
                 "feature_press": "প্রেস বিজ্ঞপ্তি",
                 "feature_vip": "ভিআইপি অ্যাকাউন্ট",
                 "feature_mcq": "এম.সি.কিউ পরীক্ষা",
+                "feature_idcard": "আইডি কার্ড লগইন",
+                "feature_donation": "অনুদান করুন",
                 
                 // এবাউট পেজ
                 "about_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ সম্পর্কে",
@@ -729,7 +796,9 @@
             "result-link": "https://mrhonlineauthority.github.io/studentsite/result.html",
             "press-link": "https://mrhonlineauthority.github.io/apps/pressnotifecation.html",
             "vip-link": "https://mrhonlineauthority.github.io/signuplogin/",
-            "mcq-link": "https://forms.gle/ZX25P9V3dZKZ3CDr9"
+            "mcq-link": "https://forms.gle/ZX25P9V3dZKZ3CDr9",
+            "idcard-link": "https://mrhonlineauthority.github.io/idcard",
+            "donation-link": "https://mrhonlineauthority.github.io"
         };
         
         // হেল্প লাইন লিংক
@@ -967,20 +1036,7 @@
             console.log("🔗 ফিচার লাইন আপডেট করতে: updateFeatureLink('ফিচার-কী', 'আপনার-লিংক')");
             console.log("📞 হেল্পলাইন লিংক আপডেট করতে: updateHelpLineLink('আপনার-হেল্প-লিংক')");
             console.log("🖼️ ইমেজ ফেডিং কন্ট্রোল: startImageFading(), stopImageFading()");
-            console.log("📋 ফিচার কী গুলো: registration-link, account-link, result-link, press-link, vip-link, mcq-link");
-            
-            // সবকিছু দেখা যাচ্ছে কিনা তা নিশ্চিত করা
-            setTimeout(function() {
-                const homePage = document.getElementById('home-page');
-                const aboutPage = document.getElementById('about-page');
-                const helpPage = document.getElementById('help-page');
-                
-                if (homePage.offsetHeight > 0 && aboutPage.offsetHeight > 0 && helpPage.offsetHeight > 0) {
-                    console.log("✅ সব পেজের কন্টেন্ট দেখা যাচ্ছে");
-                } else {
-                    console.log("⚠️ কিছু কন্টেন্ট দেখা যাচ্ছে না, স্ক্রল করুন");
-                }
-            }, 500);
+            console.log("📋 ফিচার কী গুলো: registration-link, account-link, result-link, press-link, vip-link, mcq-link, idcard-link, donation-link");
         });
     </script>
 </body>
