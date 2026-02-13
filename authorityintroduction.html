@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Authority Introduction | M.R.H Student Apps</title>
+    <!-- Font Awesome 6 (আইকনের জন্য) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - ইংরেজির জন্য Poppins, বাংলার জন্য Noto Sans Bengali -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #eef2f5 100%);
+            font-family: 'Noto Sans Bengali', 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        /* ভাষা টগল বাটন - সাইজ ছোট করা হয়েছে */
+        .lang-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background: #eef2f7;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px; /* ছোট করা হয়েছে */
+            font-size: 14px;    /* ছোট করা হয়েছে */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+            font-family: 'Poppins', 'Noto Sans Bengali', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+        }
+
+        .lang-btn:hover {
+            background: #e1e6ed;
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #1a237e;
+            color: white;
+            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.3);
+        }
+
+        /* হেডার সেকশন */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-section h1 {
+            color: #1a237e;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-section h1 i {
+            color: #ff5722;
+            font-size: 48px;
+            filter: drop-shadow(0 6px 8px rgba(255, 87, 34, 0.2));
+        }
+
+        .header-section .subtitle {
+            color: #555;
+            font-size: 22px;
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .header-section .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #1a237e, #3f51b5);
+            border-radius: 4px;
+        }
+
+        /* টিম গ্রিড */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* টিম কার্ড */
+        .team-card {
+            background: white;
+            border-radius: 28px;
+            padding: 30px 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(26, 35, 126, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 45px rgba(26, 35, 126, 0.15);
+            border-color: rgba(26, 35, 126, 0.2);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #1a237e, #3f51b5, #1a237e);
+            background-size: 200% 100%;
+            animation: gradientMove 3s infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* ছবি */
+        .member-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid white;
+            box-shadow: 0 12px 25px rgba(26, 35, 126, 0.2);
+            margin-bottom: 22px;
+            background: #f0f2f5;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+        }
+
+        /* নাম - এখন data-i18n দ্বারা নিয়ন্ত্রিত */
+        .member-name {
+            color: #1a237e;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        /* পদবী */
+        .member-designation {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.25);
+        }
+
+        /* বায়ো */
+        .member-bio {
+            color: #444;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            font-weight: 500;
+        }
+
+        /* সোশ্যাল আইকন */
+        .social-links {
+            display: flex;
+            gap: 18px;
+            margin-top: 10px;
+        }
+
+        .social-links a {
+            color: #666;
+            font-size: 22px;
+            transition: all 0.2s;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: white;
+            transform: scale(1.15);
+        }
+
+        .social-links a.facebook:hover {
+            background: #1877f2;
+        }
+
+        .social-links a.whatsapp:hover {
+            background: #25d366;
+        }
+
+        /* ফুটার */
+        .footer-note {
+            margin-top: 60px;
+            text-align: center;
+            color: #888;
+            font-size: 15px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 25px;
+        }
+
+        .footer-note i {
+            color: #ff5722;
+            margin: 0 4px;
+        }
+
+        /* রেস্পন্সিভ */
+        @media (max-width: 650px) {
+            .container {
+                padding: 30px 20px;
+            }
+            .header-section h1 {
+                font-size: 34px;
+            }
+            .header-section h1 i {
+                font-size: 40px;
+            }
+            .header-section .subtitle {
+                font-size: 20px;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .member-img {
+                width: 120px;
+                height: 120px;
+            }
+            .member-name {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .header-section h1 {
+                font-size: 28px;
+            }
+            .header-section h1 i {
+                font-size: 34px;
+            }
+            .header-section .subtitle {
+                font-size: 18px;
+            }
+            .team-card {
+                padding: 25px 15px;
+            }
+            .social-links a {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            .lang-btn {
+                padding: 6px 14px; /* আরও ছোট */
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ভাষা টগল বাটন (ছোট সাইজ) -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-en">English</button>
+            <button class="lang-btn" id="lang-bn">বাংলা</button>
+        </div>
+
+        <!-- হেডার -->
+        <div class="header-section">
+            <h1>
+                <i class="fas fa-building"></i>
+                <span data-i18n="title">Authority Introduction</span>
+            </h1>
+            <div class="subtitle" data-i18n="subtitle">
+                Meet Our Team
+            </div>
+        </div>
+
+        <!-- টিম গ্রিড -->
+        <div class="team-grid">
+            <!-- সদস্য ১: আব্দুল মাজিদ (প্রতিষ্ঠাতা) -->
+            <div class="team-card">
+                <div class="member-img">
+                    <img src="https://mrhonlineauthority.github.io/ebent/mrhlogo.png" alt="Abdul Mazid">
+                </div>
+                <div class="member-name" data-i18n="member1_name">Abdul Mazid</div>
+                <div class="member-designation" data-i18n="designation1">Founder & CEO</div>
+                <div class="member-bio" data-i18n="bio1">
+                    Founder and Head of M.R.H Online Registration Authority.
+                </div>
+                <div class="social-links">
+                    <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- সদস্য ২: শাইখ ফাহিম (মেনেজিং ডিরেক্টর) -->
+            <div class="team-card">
+                <div class="member-img">
+                    <img src="https://mrhonlineauthority.github.io/ebent/mrhlogo.png" alt="Shaikh Fahim">
+                </div>
+                <div class="member-name" data-i18n="member2_name">Shaikh Fahim</div>
+                <div class="member-designation" data-i18n="designation2">Managing Director</div>
+                <div class="member-bio" data-i18n="bio2">
+                    Chief Managing Director and Director of M.R.H Online Registration Authority.
+                </div>
+                <div class="social-links">
+                    <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- সদস্য ৩: রিয়াদ হাসান (প্রধান প্রযুক্তি কর্মকর্তা) -->
+            <div class="team-card">
+                <div class="member-img">
+                    <img src="https://mrhonlineauthority.github.io/ebent/riyad.png" alt="Riyad Hassan">
+                </div>
+                <div class="member-name" data-i18n="member3_name">Riyad Hassan</div>
+                <div class="member-designation" data-i18n="designation3">Chief Technology Officer</div>
+                <div class="member-bio" data-i18n="bio3">
+                    Expert in software architecture and scalable systems.
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/share/1GMRW7McSN/" class="facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/8801864052852" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ফুটার -->
+        <div class="footer-note">
+            <i class="fas fa-heart" style="color: #f44336;"></i> 
+            <span data-i18n="footer">Digital Companion of Education – M.R.H Student Apps</span>
+            <i class="fas fa-heart" style="color: #f44336;"></i>
+        </div>
+    </div>
+
+    <script>
+        // ============ ভাষা ডেটা ============
+        const translations = {
+            en: {
+                "title": "Authority Introduction",
+                "subtitle": "Meet Our Team",
+                "member1_name": "Abdul Mazid",
+                "member2_name": "Shaikh Fahim",
+                "member3_name": "Riyad Hassan",
+                "designation1": "Founder & CEO",
+                "bio1": "Founder and Head of M.R.H Online Registration Authority.",
+                "designation2": "Managing Director",
+                "bio2": "Chief Managing Director and Director of M.R.H Online Registration Authority.",
+                "designation3": "Chief Technology Officer",
+                "bio3": "Expert in software architecture and scalable systems.",
+                "footer": "Digital Companion of Education – M.R.H Student Apps"
+            },
+            bn: {
+                "title": "কর্তৃপক্ষের পরিচয়",
+                "subtitle": "আমাদের টিমের সদস্যরা",
+                "member1_name": "আব্দুল মাজিদ",
+                "member2_name": "শাইখ ফাহিম",
+                "member3_name": "রিয়াদ হাসান",
+                "designation1": "প্রতিষ্ঠাতা ও প্রধান নির্বাহী",
+                "bio1": "এম.আর.এইচ অনলাইন রেজিষ্ট্রেশন কতৃপক্ষের প্রতিষ্ঠাতা ও প্রধান।",
+                "designation2": "মেনেজিং ডিরেক্টর",
+                "bio2": "এম.আর.এইচ অনলাইন রেজিষ্ট্রেশন কতৃপক্ষের প্রধান মেনেজিং ডিরেক্টর ও পরিচালক।",
+                "designation3": "প্রধান প্রযুক্তি কর্মকর্তা",
+                "bio3": "সফটওয়্যার আর্কিটেকচার ও স্কেলেবল সিস্টেমে বিশেষজ্ঞ।",
+                "footer": "শিক্ষার ডিজিটাল সাথী – M.R.H Student Apps"
+            }
+        };
+
+        // ============ বর্তমান ভাষা সেট করা ============
+        let currentLang = localStorage.getItem('preferredLang') || 'bn'; // ডিফল্ট বাংলা
+
+        // ভাষা পরিবর্তন ফাংশন
+        function changeLanguage(lang) {
+            currentLang = lang;
+            // সব data-i18n এলিমেন্ট আপডেট
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // ভাষা বাটনের active ক্লাস আপডেট
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (lang === 'en') {
+                document.getElementById('lang-en').classList.add('active');
+            } else {
+                document.getElementById('lang-bn').classList.add('active');
+            }
+
+            // লোকালস্টোরেজে সংরক্ষণ
+            localStorage.setItem('preferredLang', lang);
+        }
+
+        // ইভেন্ট লিসেনার
+        document.addEventListener('DOMContentLoaded', () => {
+            // প্রাথমিক ভাষা সেট
+            changeLanguage(currentLang);
+
+            // ইংরেজি বাটন
+            document.getElementById('lang-en').addEventListener('click', () => {
+                changeLanguage('en');
+            });
+
+            // বাংলা বাটন
+            document.getElementById('lang-bn').addEventListener('click', () => {
+                changeLanguage('bn');
+            });
+        });
+    </script>
+</body>
+</html>
