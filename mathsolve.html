@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Math Solve | গণিত সলভ | M.R.H Student Apps</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter (English), Noto Sans Bengali (Bangla) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #eef2f5 100%);
+            font-family: 'Inter', 'Noto Sans Bengali', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        /* ভাষা টগল বাটন */
+        .lang-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background: #eef2f7;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            letter-spacing: 0.3px;
+        }
+
+        .lang-btn:hover {
+            background: #e1e6ed;
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #1a237e;
+            color: white;
+            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.3);
+        }
+
+        /* হেডার */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-section h1 {
+            color: #1a237e;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header-section h1 i {
+            color: #ff5722;
+            font-size: 40px;
+            filter: drop-shadow(0 6px 8px rgba(255, 87, 34, 0.2));
+        }
+
+        /* স্কোর ও টাইমার */
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8faff;
+            border-radius: 30px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.03);
+            border: 1px solid rgba(26,35,126,0.1);
+        }
+
+        .score-box, .timer-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .score-box i, .timer-box i {
+            color: #ff5722;
+            font-size: 22px;
+        }
+
+        #score {
+            font-weight: 700;
+            color: #1a237e;
+        }
+
+        #timer {
+            font-weight: 700;
+            color: #f44336;
+        }
+
+        /* প্রশ্ন তালিকা */
+        .problems-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .problem-item {
+            background: white;
+            border-radius: 16px;
+            padding: 10px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            border: 1px solid rgba(26,35,126,0.1);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .problem-item.correct {
+            background: #e8f5e9;
+            border-left: 6px solid #4caf50;
+        }
+
+        .problem-item.incorrect {
+            background: #ffebee;
+            border-left: 6px solid #f44336;
+        }
+
+        .problem-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a237e;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .problem-input {
+            flex: 1;
+            min-width: 80px;
+            max-width: 120px;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .problem-input:focus {
+            border-color: #1a237e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+        }
+
+        .problem-input:disabled {
+            background: #f5f5f5;
+            border-color: #ccc;
+            color: #666;
+        }
+
+        .correct-answer-hint {
+            font-size: 14px;
+            color: #4caf50;
+            font-weight: 600;
+            display: none;
+            white-space: nowrap;
+        }
+
+        .problem-item.incorrect .correct-answer-hint {
+            display: inline-block;
+        }
+
+        /* বাটন গ্রুপ */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 18px rgba(26, 35, 126, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(26, 35, 126, 0.35);
+        }
+
+        .btn:disabled {
+            background: #b0bec5;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #ff9800;
+            box-shadow: 0 8px 18px rgba(255,152,0,0.25);
+        }
+
+        .btn-secondary:hover {
+            background: #fb8c00;
+        }
+
+        /* ফলাফল বার্তা */
+        .result-message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            background: #e8eaf6;
+            color: #1a237e;
+            display: none;
+        }
+
+        .result-message.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        /* ফুটার */
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        /* স্ক্রলবার কাস্টমাইজ */
+        .problems-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .problems-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .problems-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        /* রেস্পন্সিভ */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 18px;
+            }
+            .header-section h1 {
+                font-size: 30px;
+            }
+            .problem-item {
+                padding: 10px;
+                gap: 8px;
+            }
+            .problem-text {
+                min-width: 90px;
+                font-size: 16px;
+            }
+            .problem-input {
+                min-width: 70px;
+                max-width: 100px;
+                padding: 6px 10px;
+                font-size: 15px;
+            }
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .problem-item {
+                flex-wrap: nowrap;
+            }
+            .problem-text {
+                min-width: 80px;
+                font-size: 15px;
+            }
+            .problem-input {
+                min-width: 60px;
+                max-width: 90px;
+                padding: 5px 8px;
+                font-size: 14px;
+            }
+            .correct-answer-hint {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stats-panel {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            .problem-item {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ভাষা টগল বাটন -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-en">English</button>
+            <button class="lang-btn" id="lang-bn">বাংলা</button>
+        </div>
+
+        <!-- হেডার (আইকন আপডেট করা হয়েছে) -->
+        <div class="header-section">
+            <h1>
+                <i class="fas fa-square-root-alt"></i>
+                <span data-i18n="title">Math Solve</span>
+            </h1>
+        </div>
+
+        <!-- স্কোর ও টাইমার -->
+        <div class="stats-panel">
+            <div class="score-box">
+                <i class="fas fa-star"></i>
+                <span data-i18n="score">Score</span>: <span id="score">0</span>/10
+            </div>
+            <div class="timer-box">
+                <i class="fas fa-hourglass-half"></i>
+                <span data-i18n="time_left">Time Left</span>: <span id="timer">05:00</span>
+            </div>
+        </div>
+
+        <!-- প্রশ্ন তালিকা (১০টি) -->
+        <div id="problemsContainer" class="problems-list"></div>
+
+        <!-- বাটন গ্রুপ -->
+        <div class="button-group">
+            <button id="submitBtn" class="btn">
+                <i class="fas fa-check-circle"></i>
+                <span data-i18n="submit">Submit</span>
+            </button>
+            <button id="restartBtn" class="btn btn-secondary">
+                <i class="fas fa-redo-alt"></i>
+                <span data-i18n="restart">Restart</span>
+            </button>
+        </div>
+
+        <!-- ফলাফল বার্তা -->
+        <div id="resultMessage" class="result-message"></div>
+
+        <!-- ফুটার -->
+        <div class="footer-note">
+            <i class="fas fa-heart" style="color: #f44336;"></i> 
+            <span data-i18n="footer">M.R.H Student Apps – Test Your Math Skills</span>
+            <i class="fas fa-heart" style="color: #f44336;"></i>
+        </div>
+    </div>
+
+    <script>
+        // ============ ভাষা ডেটা ============
+        const translations = {
+            en: {
+                "title": "Math Solve",
+                "score": "Score",
+                "time_left": "Time Left",
+                "submit": "Submit",
+                "restart": "Restart",
+                "footer": "M.R.H Student Apps – Test Your Math Skills",
+                "congrats": "🎉 Congratulations! All answers are correct!",
+                "try_again": "You got {score} out of 10. Keep practicing!",
+                "time_up": "⏰ Time is up!",
+                "correct_answer": "Correct: {answer}",
+                "fill_all": "Write down all the answers and submit!"
+            },
+            bn: {
+                "title": "গণিত সলভ",
+                "score": "স্কোর",
+                "time_left": "বাকি সময়",
+                "submit": "জমা দিন",
+                "restart": "আবার শুরু",
+                "footer": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স – তোমার গণিত দক্ষতা যাচাই করো",
+                "congrats": "🎉 অভিনন্দন! সব উত্তর সঠিক হয়েছে!",
+                "try_again": "তুমি ১০ এর মধ্যে {score} পেয়েছ। আরও অনুশীলন করো।",
+                "time_up": "⏰ সময় শেষ!",
+                "correct_answer": "সঠিক: {answer}",
+                "fill_all": "সব গুলো উত্তর লিখে সাবমিট দাও!"
+            }
+        };
+
+        // বর্তমান ভাষা (ডিফল্ট বাংলা)
+        let currentLang = localStorage.getItem('mathSolveLang') || 'bn';
+
+        // ভাষা পরিবর্তন ফাংশন
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('id') === `lang-${lang}`) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            localStorage.setItem('mathSolveLang', lang);
+
+            // ফলাফল মেসেজ আপডেট
+            const resultDiv = document.getElementById('resultMessage');
+            if (resultDiv.style.display !== 'none') {
+                if (score === 10) {
+                    resultDiv.innerHTML = translations[lang]['congrats'];
+                } else {
+                    resultDiv.innerHTML = translations[lang]['try_again'].replace('{score}', score);
+                }
+            }
+
+            // হিন্ট আপডেট
+            problems.forEach((p, idx) => {
+                const hint = document.getElementById(`hint-${idx}`);
+                if (hint && p.isCorrect === false) {
+                    hint.textContent = translations[lang]['correct_answer'].replace('{answer}', p.answer);
+                }
+            });
+        }
+
+        // ============ Math Solve গেম লজিক ============
+        let problems = [];
+        let score = 0;
+        let timerInterval;
+        let timeLeft = 300; // 5 মিনিট = 300 সেকেন্ড
+        let quizSubmitted = false;
+
+        // এলোমেলো অংক জেনারেট (১০টি প্রশ্ন)
+        function generateRandomProblem(index) {
+            const operators = ['+', '-', '×', '÷'];
+            const op = operators[Math.floor(Math.random() * operators.length)];
+            let num1, num2, answer;
+
+            switch(op) {
+                case '+':
+                    num1 = Math.floor(Math.random() * 50) + 1;
+                    num2 = Math.floor(Math.random() * 50) + 1;
+                    answer = num1 + num2;
+                    break;
+                case '-':
+                    num1 = Math.floor(Math.random() * 90) + 10;
+                    num2 = Math.floor(Math.random() * 80) + 1;
+                    answer = num1 - num2;
+                    break;
+                case '×':
+                    num1 = Math.floor(Math.random() * 12) + 1;
+                    num2 = Math.floor(Math.random() * 12) + 1;
+                    answer = num1 * num2;
+                    break;
+                case '÷':
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                    answer = Math.floor(Math.random() * 10) + 1;
+                    num1 = num2 * answer;
+                    break;
+            }
+
+            return {
+                id: index,
+                question: `${num1} ${op} ${num2} = ?`,
+                answer: answer,
+                userAnswer: null,
+                isCorrect: false
+            };
+        }
+
+        // নতুন ১০টি প্রশ্ন জেনারেট
+        function generateNewProblems() {
+            problems = [];
+            for (let i = 0; i < 10; i++) {
+                problems.push(generateRandomProblem(i + 1));
+            }
+        }
+
+        // প্রশ্নগুলো DOM-এ রেন্ডার
+        function renderProblems() {
+            const container = document.getElementById('problemsContainer');
+            let html = '';
+            problems.forEach((p, idx) => {
+                html += `
+                    <div class="problem-item" id="problem-${idx}">
+                        <div class="problem-text">${p.question}</div>
+                        <input type="number" class="problem-input" id="input-${idx}" placeholder="?" ${quizSubmitted ? 'disabled' : ''}>
+                        <span class="correct-answer-hint" id="hint-${idx}"></span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // স্কোর আপডেট
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        // টাইমার আপডেট
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // টাইমার শুরু
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (quizSubmitted) return;
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    updateTimerDisplay();
+                    clearInterval(timerInterval);
+                    if (!quizSubmitted) {
+                        handleSubmit(true); // true = সময় শেষ
+                    }
+                }
+            }, 1000);
+        }
+
+        // সব উত্তর লেখা আছে কিনা চেক
+        function allAnswersFilled() {
+            for (let i = 0; i < problems.length; i++) {
+                const input = document.getElementById(`input-${i}`);
+                if (!input || input.value.trim() === '') {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // উত্তর যাচাই ও ফলাফল দেখানো
+        function checkAnswers() {
+            score = 0;
+            problems.forEach((p, idx) => {
+                const input = document.getElementById(`input-${idx}`);
+                const userAns = parseFloat(input.value);
+                p.userAnswer = isNaN(userAns) ? null : userAns;
+
+                if (p.userAnswer === p.answer) {
+                    p.isCorrect = true;
+                    score += 1; // প্রতিটি প্রশ্নে ১ পয়েন্ট
+                } else {
+                    p.isCorrect = false;
+                }
+            });
+
+            problems.forEach((p, idx) => {
+                const item = document.getElementById(`problem-${idx}`);
+                const hint = document.getElementById(`hint-${idx}`);
+                if (p.isCorrect) {
+                    item.classList.add('correct');
+                    item.classList.remove('incorrect');
+                    hint.textContent = '';
+                } else {
+                    item.classList.add('incorrect');
+                    item.classList.remove('correct');
+                    hint.textContent = translations[currentLang]['correct_answer'].replace('{answer}', p.answer);
+                }
+            });
+
+            updateScore();
+        }
+
+        // সাবমিট হ্যান্ডলার
+        function handleSubmit(timeUp = false) {
+            if (quizSubmitted) return;
+
+            // সময় শেষ হলে সাবমিট করতে বাধ্য করা
+            if (timeUp) {
+                // সব ইনপুট ডিজেবল করা হবে
+            } else {
+                // সব উত্তর লেখা আছে কিনা চেক
+                if (!allAnswersFilled()) {
+                    alert(translations[currentLang]['fill_all']);
+                    return;
+                }
+            }
+
+            quizSubmitted = true;
+            clearInterval(timerInterval);
+
+            document.querySelectorAll('.problem-input').forEach(input => input.disabled = true);
+            checkAnswers();
+
+            const resultDiv = document.getElementById('resultMessage');
+            resultDiv.style.display = 'block';
+            if (score === 10) {
+                resultDiv.className = 'result-message success';
+                resultDiv.innerHTML = translations[currentLang]['congrats'];
+            } else {
+                resultDiv.className = 'result-message';
+                resultDiv.innerHTML = translations[currentLang]['try_again'].replace('{score}', score);
+            }
+        }
+
+        // রিস্টার্ট
+        function restartGame() {
+            clearInterval(timerInterval);
+            quizSubmitted = false;
+            timeLeft = 300; // 5 মিনিট
+            updateTimerDisplay();
+            score = 0;
+            updateScore();
+
+            generateNewProblems();
+            renderProblems();
+            document.getElementById('resultMessage').style.display = 'none';
+            startTimer();
+        }
+
+        // DOM লোড হলে
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLang);
+
+            document.getElementById('lang-en').addEventListener('click', () => changeLanguage('en'));
+            document.getElementById('lang-bn').addEventListener('click', () => changeLanguage('bn'));
+            document.getElementById('submitBtn').addEventListener('click', () => handleSubmit(false));
+            document.getElementById('restartBtn').addEventListener('click', restartGame);
+
+            restartGame();
+        });
+    </script>
+</body>
+</html>
