@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Our Educational Video | M.R.H Student Apps</title>
+    <!-- Font Awesome 6 (আইকনের জন্য) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Inter (ইংরেজি), Noto Sans Bengali (বাংলা) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #eef2f5 100%);
+            font-family: 'Inter', 'Noto Sans Bengali', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        /* ভাষা টগল বাটন */
+        .lang-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background: #eef2f7;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            letter-spacing: 0.3px;
+        }
+
+        .lang-btn:hover {
+            background: #e1e6ed;
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #1a237e;
+            color: white;
+            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.3);
+        }
+
+        /* হেডার সেকশন */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-section h1 {
+            color: #1a237e;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            letter-spacing: -0.5px;
+        }
+
+        .header-section h1 i {
+            color: #ff5722;
+            font-size: 48px;
+            filter: drop-shadow(0 6px 8px rgba(255, 87, 34, 0.2));
+        }
+
+        .header-section .subtitle {
+            color: #555;
+            font-size: 22px;
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            letter-spacing: 0.3px;
+        }
+
+        .header-section .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #1a237e, #3f51b5);
+            border-radius: 4px;
+        }
+
+        /* ভিডিও গ্রিড */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        /* ভিডিও কার্ড */
+        .video-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 15px 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(26, 35, 126, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(26, 35, 126, 0.12);
+            border-color: rgba(26, 35, 126, 0.2);
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #1a237e, #3f51b5, #1a237e);
+            background-size: 200% 100%;
+            animation: gradientMove 3s infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* ইউটিউব ভিডিও এম্বেড */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            margin-bottom: 0; /* কোন টাইটেল নেই */
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px;
+        }
+
+        /* ফুটার */
+        .footer-note {
+            margin-top: 60px;
+            text-align: center;
+            color: #888;
+            font-size: 15px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 25px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-note i {
+            color: #ff5722;
+            margin: 0 4px;
+        }
+
+        /* রেস্পন্সিভ */
+        @media (max-width: 650px) {
+            .container {
+                padding: 30px 20px;
+            }
+            .header-section h1 {
+                font-size: 34px;
+            }
+            .header-section h1 i {
+                font-size: 40px;
+            }
+            .header-section .subtitle {
+                font-size: 20px;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .header-section h1 {
+                font-size: 28px;
+            }
+            .header-section h1 i {
+                font-size: 34px;
+            }
+            .header-section .subtitle {
+                font-size: 18px;
+            }
+            .video-card {
+                padding: 12px 12px 15px;
+            }
+            .lang-btn {
+                padding: 6px 14px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ভাষা টগল বাটন -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-en">English</button>
+            <button class="lang-btn" id="lang-bn">বাংলা</button>
+        </div>
+
+        <!-- হেডার (ভাষা অনুযায়ী পরিবর্তিত) -->
+        <div class="header-section">
+            <h1>
+                <i class="fas fa-video"></i>
+                <span data-i18n="title">Our Educational Video</span>
+            </h1>
+            <div class="subtitle" data-i18n="subtitle">
+                Learn with Us
+            </div>
+        </div>
+
+        <!-- ভিডিও গ্রিড (৫টি, কোনো টাইটেল/টেক্সট নেই) -->
+        <div class="video-grid">
+            <!-- ভিডিও ১ (enablejsapi=1 যোগ করা হয়েছে) -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/C1lK2P2PDac?si=o2LzF88kgazt0yfq&enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- ভিডিও ২ -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/s834AGREyV4?si=Fsnt7d5obr8YeK1L&enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- ভিডিও ৩ -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/0AW9aed1gZk?si=eWkuHeqUOUZoPoNF&enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- ভিডিও ৪ -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/pWep0d0AuRo?si=LSfF0mIwxRL6R5gd&enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- ভিডিও ৫ -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/4GX6IHU2MuY?si=hFzZRm4MZY-QatKL&enablejsapi=1" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- ফুটার -->
+        <div class="footer-note">
+            <i class="fas fa-heart" style="color: #f44336;"></i> 
+            <span data-i18n="footer">M.R.H Student Apps – Educational Videos</span>
+            <i class="fas fa-heart" style="color: #f44336;"></i>
+        </div>
+    </div>
+
+    <script>
+        // ============ ভাষা ডেটা ============
+        const translations = {
+            en: {
+                "title": "Our Educational Video",
+                "subtitle": "Learn with Us",
+                "footer": "M.R.H Student Apps – Educational Videos"
+            },
+            bn: {
+                "title": "আমাদের শিক্ষনীয় ভিডিও",
+                "subtitle": "আমাদের সাথে শিখুন",
+                "footer": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স – শিক্ষনীয় ভিডিও"
+            }
+        };
+
+        // বর্তমান ভাষা (ডিফল্ট বাংলা)
+        let currentLang = localStorage.getItem('eduVideoLang') || 'bn';
+
+        // ভাষা পরিবর্তন ফাংশন
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('id') === `lang-${lang}`) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            localStorage.setItem('eduVideoLang', lang);
+        }
+
+        // ============ ভিডিও কন্ট্রোল (একসাথে একটিমাত্র চলে) ============
+        // YouTube IFrame API লোড করা
+        function loadYouTubeAPI() {
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+
+        let players = []; // সব প্লেয়ার সংরক্ষণ
+
+        // API রেডি হলে
+        window.onYouTubeIframeAPIReady = function() {
+            const iframes = document.querySelectorAll('.video-wrapper iframe');
+            iframes.forEach((iframe, index) => {
+                const player = new YT.Player(iframe, {
+                    events: {
+                        'onStateChange': (event) => onPlayerStateChange(event, index)
+                    }
+                });
+                players.push(player);
+            });
+        };
+
+        // প্লেয়ার স্টেট পরিবর্তন হলে
+        function onPlayerStateChange(event, currentIndex) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                // অন্য সব প্লেয়ার পজ করে দাও
+                players.forEach((player, idx) => {
+                    if (idx !== currentIndex && player && typeof player.pauseVideo === 'function') {
+                        player.pauseVideo();
+                    }
+                });
+            }
+        }
+
+        // DOM লোড হলে
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLang);
+
+            document.getElementById('lang-en').addEventListener('click', () => {
+                changeLanguage('en');
+            });
+
+            document.getElementById('lang-bn').addEventListener('click', () => {
+                changeLanguage('bn');
+            });
+
+            // YouTube API লোড
+            loadYouTubeAPI();
+        });
+    </script>
+</body>
+</html>
