@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M.R.H Student App</title>
+    <title>M.R.H Student Apps</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Times New Roman', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
@@ -38,6 +38,34 @@
             margin-bottom: 10px;
         }
         
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* 3 ডট মেনু আইকন - হেডারে */
+        .menu-icon {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .menu-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* ভাষা সুইচার */
         .language-switcher {
             display: flex;
             gap: 8px;
@@ -89,7 +117,126 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        /* পেজ কন্টেন্ট */
+        /* ============ সাইডবার মেনু ============ */
+        /* ওভারলে - মেনু খোলা থাকলে পেছনে অন্ধকার */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* সাইডবার */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        .side-menu.open {
+            left: 0;
+        }
+        
+        /* মেনু হেডার */
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border-top-right-radius: 20px;
+        }
+        
+        .menu-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .close-menu {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .close-menu:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        /* মেনু আইটেমের তালিকা */
+        .menu-items {
+            flex: 1;
+            padding: 15px 0;
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item i {
+            width: 24px;
+            text-align: center;
+            color: #1a237e;
+            font-size: 18px;
+        }
+        
+        .menu-item:hover {
+            background: #f5f7fa;
+            padding-left: 25px;
+        }
+        
+        .menu-item span {
+            flex: 1;
+        }
+        
+        /* পেজ কন্টেন্ট (আগের মতো) */
         .page {
             display: none;
             flex: 1;
@@ -128,7 +275,7 @@
             left: 0;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            border-radius: 11px; /* Container border-radius minus border width */
+            border-radius: 11px;
         }
         
         .fading-image.active {
@@ -169,7 +316,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-width: 0; /* Important for text truncation */
+            min-width: 0;
         }
         
         .feature-btn:before {
@@ -212,8 +359,160 @@
         }
         
         .two-buttons-row .feature-btn {
-            flex: 0 1 calc(50% - 5px); /* দুইটি বাটন সমান সাইজে */
-            max-width: calc(50% - 5px); /* দুইটি বাটন সমান সাইজে */
+            flex: 0 1 calc(50% - 5px);
+            max-width: calc(50% - 5px);
+        }
+        
+        /* তিনটি বাটনের সারির জন্য বিশেষ স্টাইল (নতুন) */
+        .three-buttons-row {
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .three-buttons-row .feature-btn {
+            flex: 0 1 calc(33.33% - 5px);
+            max-width: calc(33.33% - 5px);
+        }
+        
+        /* আইকন রং */
+        .feature-btn:nth-child(1) i { color: #2196F3; }
+        .feature-btn:nth-child(2) i { color: #4CAF50; }
+        .feature-btn:nth-child(3) i { color: #FF9800; }
+        .feature-btn:nth-child(4) i { color: #9C27B0; }
+        .feature-btn:nth-child(5) i { color: #F44336; }
+        .feature-btn:nth-child(6) i { color: #009688; }
+        .feature-btn:nth-child(7) i { color: #3F51B5; }
+        .feature-btn:nth-child(8) i { color: #E91E63; }
+        .feature-btn:nth-child(9) i { color: #FF5722; }
+        .feature-btn:nth-child(10) i { color: #8BC34A; }
+        .feature-btn:nth-child(11) i { color: #FFD700; } /* নতুন বাটনের জন্য সোনালি রং */
+        
+        /* লার্নিং টুলস সেকশন */
+        .learning-tools-section {
+            padding: 0 18px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #1a237e;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 20px;
+            z-index: 2;
+        }
+        
+        .section-divider {
+            border: none;
+            border-top: 3px solid #1a237e;
+            margin: -12px 0 20px 0;
+            opacity: 0.3;
+            border-radius: 3px;
+        }
+        
+        /* ক্যালকুলেটর পেজ স্টাইল */
+        .calculator-content {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .calculator-display {
+            width: 100%;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 20px 15px;
+            margin-bottom: 25px;
+            text-align: right;
+            font-size: 32px;
+            font-weight: 600;
+            color: #1a237e;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            white-space: nowrap;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .calc-btn {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 10px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .calc-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+        
+        .calc-btn.operator {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            border: none;
+        }
+        
+        .calc-btn.operator:hover {
+            background: linear-gradient(135deg, #283593 0%, #1a237e 100%);
+        }
+        
+        .calc-btn.equals {
+            background: #ff9800;
+            color: white;
+            border: none;
+            grid-row: span 1;
+        }
+        
+        .calc-btn.equals:hover {
+            background: #f57c00;
+        }
+        
+        .calc-btn.clear {
+            background: #f44336;
+            color: white;
+            border: none;
+        }
+        
+        .calc-btn.clear:hover {
+            background: #d32f2f;
+        }
+        
+        .calc-btn.zero {
+            grid-column: span 2;
         }
         
         /* এবাউট পেজ */
@@ -399,7 +698,7 @@
             left: 0;
             right: 0;
             background: white;
-            padding: 16px 0;
+            padding: 12px 0;
             display: flex;
             justify-content: space-around;
             border-top: 1px solid #ddd;
@@ -417,9 +716,10 @@
             flex-direction: column;
             align-items: center;
             transition: all 0.3s ease;
-            padding: 6px 16px;
+            padding: 6px 12px;
             border-radius: 10px;
             text-decoration: none;
+            flex: 0 1 auto;
         }
         
         .nav-btn:hover, .nav-btn.active {
@@ -429,8 +729,8 @@
         }
         
         .nav-btn i {
-            font-size: 26px;
-            margin-bottom: 6px;
+            font-size: 24px;
+            margin-bottom: 4px;
         }
         
         /* স্ক্রলবার স্টাইল */
@@ -452,17 +752,22 @@
             background: #a1a1a1;
         }
         
-        /* আইকন রং */
-        .feature-btn:nth-child(1) i { color: #2196F3; }
-        .feature-btn:nth-child(2) i { color: #4CAF50; }
-        .feature-btn:nth-child(3) i { color: #FF9800; }
-        .feature-btn:nth-child(4) i { color: #9C27B0; }
-        .feature-btn:nth-child(5) i { color: #F44336; }
-        .feature-btn:nth-child(6) i { color: #009688; }
-        .feature-btn:nth-child(7) i { color: #3F51B5; }
-        .feature-btn:nth-child(8) i { color: #E91E63; }
-        
         /* মোবাইল রেস্পন্সিভ */
+        @media (max-width: 480px) {
+            .header-left {
+                gap: 10px;
+            }
+            
+            .menu-icon {
+                padding: 5px 9px;
+                font-size: 14px;
+            }
+            
+            .side-menu {
+                width: 250px;
+            }
+        }
+        
         @media (max-width: 380px) {
             .app-title {
                 font-size: 22px;
@@ -480,6 +785,52 @@
             
             .feature-btn i {
                 font-size: 24px;
+            }
+            
+            .feature-btn {
+                height: 95px;
+                padding: 12px 4px;
+            }
+            
+            .two-buttons-row .feature-btn {
+                flex: 0 1 calc(50% - 6px);
+                max-width: calc(50% - 6px);
+            }
+            
+            /* তিনটি বাটনের জন্য মোবাইল অ্যাডজাস্টমেন্ট */
+            .three-buttons-row .feature-btn {
+                flex: 0 1 calc(33.33% - 6px);
+                max-width: calc(33.33% - 6px);
+                padding: 10px 4px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+                padding: 0 15px;
+            }
+            
+            .calculator-content {
+                padding: 20px;
+                margin: 15px;
+            }
+            
+            .calculator-display {
+                font-size: 28px;
+                padding: 16px 12px;
+            }
+            
+            .calc-btn {
+                padding: 14px 8px;
+                font-size: 18px;
+            }
+            
+            .nav-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
+            .nav-btn i {
+                font-size: 22px;
             }
             
             .about-content, .help-content {
@@ -513,54 +864,68 @@
                 gap: 10px;
             }
             
+            .header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
             .fading-image-container {
                 height: 170px;
             }
             
-            .feature-btn {
-                margin: 0 3px;
-                padding: 12px 4px;
-                height: 95px;
-            }
-            
-            .two-buttons-row .feature-btn {
-                flex: 0 1 calc(50% - 6px);
-                max-width: calc(50% - 6px);
-            }
-            
-            .features-section {
+            .learning-tools-section {
                 padding: 0 12px;
-            }
-        }
-        
-        @media (max-width: 320px) {
-            .feature-btn span {
-                font-size: 11px;
-            }
-            
-            .feature-btn i {
-                font-size: 22px;
-            }
-            
-            .feature-btn {
-                height: 90px;
-                padding: 10px 3px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- ওভারলে (মেনু খোলা থাকলে) -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    
+    <!-- সাইডবার মেনু -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <h3>M.R.H Apps</h3>
+            <button class="close-menu" id="closeMenuBtn">&times;</button>
+        </div>
+        <div class="menu-items">
+            <!-- কর্তৃপক্ষের পরিচয় -->
+            <a href="#" class="menu-item" data-link="authority-link">
+                <i class="fas fa-building"></i>
+                <span data-i18n="authority_intro">Authority Introduction</span>
+            </a>
+            <!-- আমাদের শিক্ষণীয় ভিডিও -->
+            <a href="#" class="menu-item" data-link="educational-video-link">
+                <i class="fas fa-video"></i>
+                <span data-i18n="educational_video">Our educational Video</span>
+            </a>
+            <!-- আমাদের অ্যাপ্স -->
+            <a href="#" class="menu-item" data-link="apps-link">
+                <i class="fas fa-th"></i>
+                <span data-i18n="our_apps">Our apps</span>
+            </a>
+        </div>
+    </div>
+
     <!-- হেডার অংশ -->
     <div class="header">
         <div class="header-top">
-            <div class="language-switcher">
-                <button class="lang-btn active" data-lang="en">English</button>
-                <button class="lang-btn" data-lang="bn">বাংলা</button>
+            <div class="header-left">
+                <!-- 3 ডট মেনু আইকন (এখন সাইডবার খুলবে) -->
+                <button class="menu-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <!-- ভাষা সুইচার -->
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">English</button>
+                    <button class="lang-btn" data-lang="bn">বাংলা</button>
+                </div>
             </div>
         </div>
         <div class="logo-container">
             <img src="https://mrhonlineauthority.github.io/ebent/mrhlogo.png" alt="M.R.H Logo" class="main-logo">
-            <div class="app-title" data-i18n="app_title">M.R.H Student App</div>
+            <div class="app-title" data-i18n="app_title">M.R.H Student Apps</div>
         </div>
     </div>
     
@@ -568,25 +933,21 @@
     <div id="home-page" class="page active">
         <!-- ফেডিং ইমেজ কন্টেইনার -->
         <div class="fading-image-container">
-            <!-- প্রথম ইমেজ -->
-            <img src="https://mrhonlineauthority.github.io/ebent/logo.png" alt="App Main Image" class="fading-image active">
-            
-            <!-- দ্বিতীয় ইমেজ -->
-            <img src="https://mrhonlineauthority.github.io/ebent/nnsc.png" alt="App Secondary Image" class="fading-image">
+            <img src="https://mrhonlineauthority.github.io/ebent/logo.png" alt="Apps Main Image" class="fading-image active">
+            <img src="https://mrhonlineauthority.github.io/ebent/nnsc.png" alt="Apps Secondary Image" class="fading-image">
         </div>
         
+        <!-- মূল ফিচার বাটন - ৮টি (প্রথম দুই সারি) -->
         <div class="features-section">
             <div class="features-row">
                 <a href="#" class="feature-btn" data-link="registration-link">
                     <i class="fas fa-user-plus"></i>
                     <span data-i18n="feature_registration">Students Registration</span>
                 </a>
-                
                 <a href="#" class="feature-btn" data-link="account-link">
                     <i class="fas fa-user-circle"></i>
                     <span data-i18n="feature_account">Student Account</span>
                 </a>
-                
                 <a href="#" class="feature-btn" data-link="result-link">
                     <i class="fas fa-chart-line"></i>
                     <span data-i18n="feature_result">Result Check</span>
@@ -598,100 +959,144 @@
                     <i class="fas fa-bell"></i>
                     <span data-i18n="feature_press">Press Notification</span>
                 </a>
-                
                 <a href="#" class="feature-btn" data-link="vip-link">
                     <i class="fas fa-crown"></i>
                     <span data-i18n="feature_vip">VIP Account</span>
                 </a>
-                
                 <a href="#" class="feature-btn" data-link="mcq-link">
                     <i class="fas fa-question-circle"></i>
                     <span data-i18n="feature_mcq">M.C.Q Exam</span>
                 </a>
             </div>
             
-            <!-- নতুন দুইটি বাটন যোগ করা হয়েছে - এখন পাশাপাশি -->
-            <div class="features-row two-buttons-row">
+            <!-- তৃতীয় সারি: ID Card Login, Donation Now, Subscription Now (তিনটি বাটন) -->
+            <div class="features-row three-buttons-row">
                 <a href="#" class="feature-btn" data-link="idcard-link">
                     <i class="fas fa-id-card"></i>
                     <span data-i18n="feature_idcard">ID Card Login</span>
                 </a>
-                
                 <a href="#" class="feature-btn" data-link="donation-link">
                     <i class="fas fa-hand-holding-heart"></i>
                     <span data-i18n="feature_donation">Donation Now</span>
+                </a>
+                <!-- নতুন Subscription Now বাটন -->
+                <a href="#" class="feature-btn" data-link="subscription-link">
+                    <i class="fas fa-crown"></i>
+                    <span data-i18n="feature_subscription">Subscription Now</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- লার্নিং টুলস সেকশন (অপরিবর্তিত) -->
+        <div class="learning-tools-section">
+            <h3 class="section-title" data-i18n="learning_tools">Learning Tools</h3>
+            <hr class="section-divider">
+            <div class="features-row two-buttons-row">
+                <!-- Math Solve বাটন -->
+                <a href="#" class="feature-btn" data-link="match-solve-link">
+                    <i class="fas fa-square-root-alt"></i>
+                    <span data-i18n="feature_match_solve">Math Solve</span>
+                </a>
+                <a href="#" class="feature-btn" data-link="mcq-new-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span data-i18n="feature_mcq_new">MCQ</span>
                 </a>
             </div>
         </div>
     </div>
     
-    <!-- এবাউট পেজ -->
-    <div id="about-page" class="page">
-        <div class="about-content">
-            <h2 data-i18n="about_title">About M.R.H Student App</h2>
-            
-            <p data-i18n="about_paragraph1">Welcome to the <strong>M.R.H Student App</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.</p>
-            
-            <div class="highlight">
-                <p data-i18n="about_mission"><strong>Mission:</strong> To revolutionize the student experience by integrating cutting-edge technology with education, making academic management more accessible, efficient, and user-friendly for students everywhere.</p>
-            </div>
-            
-            <p data-i18n="about_paragraph2">The app offers a wide range of features including student registration, account management, result checking, notifications, VIP services, and MCQ exam preparation. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.</p>
-            
-            <p data-i18n="about_paragraph3">Our platform is constantly evolving with regular updates and new features based on user feedback. We are committed to providing the best possible experience for students and educators alike.</p>
-            
-            <div class="developer-info">
-                <div class="developer-info-text">
-                    <strong data-i18n="developer_authority">M.R.H Online Authority</strong><br>
-                    <strong data-i18n="developer_version">Version:</strong> 1.1.1<br>
-                    <strong data-i18n="developer_date">Release Date:</strong> 18 December 2025<br>
-                    <strong data-i18n="developer_creator">Creator:</strong> RIYAD HASSAN
-                </div>
+    <!-- ক্যালকুলেটর পেজ (অপরিবর্তিত) -->
+    <div id="calculator-page" class="page">
+        <div class="calculator-content">
+            <div class="calculator-display" id="calc-display">0</div>
+            <div class="calculator-buttons">
+                <button class="calc-btn clear" onclick="clearCalc()">C</button>
+                <button class="calc-btn" onclick="appendCalc('/')">/</button>
+                <button class="calc-btn" onclick="appendCalc('*')">×</button>
+                <button class="calc-btn clear" onclick="backspaceCalc()">⌫</button>
                 
-                <div class="developer-image">
-                    <img src="https://mrhonlineauthority.github.io/ebent/riyad.png" alt="RIYAD HASSAN">
-                </div>
+                <button class="calc-btn" onclick="appendCalc('7')">7</button>
+                <button class="calc-btn" onclick="appendCalc('8')">8</button>
+                <button class="calc-btn" onclick="appendCalc('9')">9</button>
+                <button class="calc-btn operator" onclick="appendCalc('-')">−</button>
+                
+                <button class="calc-btn" onclick="appendCalc('4')">4</button>
+                <button class="calc-btn" onclick="appendCalc('5')">5</button>
+                <button class="calc-btn" onclick="appendCalc('6')">6</button>
+                <button class="calc-btn operator" onclick="appendCalc('+')">+</button>
+                
+                <button class="calc-btn" onclick="appendCalc('1')">1</button>
+                <button class="calc-btn" onclick="appendCalc('2')">2</button>
+                <button class="calc-btn" onclick="appendCalc('3')">3</button>
+                <button class="calc-btn equals" onclick="calculateResult()">=</button>
+                
+                <button class="calc-btn zero" onclick="appendCalc('0')">0</button>
+                <button class="calc-btn" onclick="appendCalc('.')">.</button>
             </div>
-            
-            <div class="about-footer">
-                <span data-i18n="footer_copyright">M.R.H Student App © 2025 | All Rights Reserved</span>
+            <div style="margin-top: 20px; color: #666; font-size: 12px; text-align: center;" data-i18n="calculator_note">
+                প্রফেশনাল ক্যালকুলেটর | সহজ ও নির্ভুল হিসাব
             </div>
         </div>
     </div>
     
-    <!-- হেল্প পেজ -->
+    <!-- এবাউট পেজ (অপরিবর্তিত) -->
+    <div id="about-page" class="page">
+        <div class="about-content">
+            <h2 data-i18n="about_title">About M.R.H Student Apps</h2>
+            <p data-i18n="about_paragraph1">Welcome to the <strong>M.R.H Student Apps</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.</p>
+            <div class="highlight">
+                <p data-i18n="about_mission"><strong>Mission:</strong> To revolutionize the student experience by integrating cutting-edge technology with education, making academic management more accessible, efficient, and user-friendly for students everywhere.</p>
+            </div>
+            <p data-i18n="about_paragraph2">The apps offer a wide range of features including student registration, account management, result checking, notifications, VIP services, MCQ exam preparation, a professional calculator, and learning tools like Math Solve and MCQ practice. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.</p>
+            <p data-i18n="about_paragraph3">Our platform is constantly evolving with regular updates and new features based on user feedback. We are committed to providing the best possible experience for students and educators alike.</p>
+            <div class="developer-info">
+                <div class="developer-info-text">
+                    <strong data-i18n="developer_authority">M.R.H Online Authority</strong><br>
+                    <strong data-i18n="developer_version">Version:</strong> 1.3.0<br>
+                    <strong data-i18n="developer_date">Release Date:</strong> 18 December 2025<br>
+                    <strong data-i18n="developer_creator">Creator:</strong> RIYAD HASSAN
+                </div>
+                <div class="developer-image">
+                    <img src="https://mrhonlineauthority.github.io/ebent/riyad.png" alt="RIYAD HASSAN">
+                </div>
+            </div>
+            <div class="about-footer">
+                <span data-i18n="footer_copyright">M.R.H Student Apps © 2025 | All Rights Reserved</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- হেল্প পেজ (অপরিবর্তিত) -->
     <div id="help-page" class="page">
         <div class="help-content">
             <h2 data-i18n="help_title">Help & Support</h2>
-            
-            <p data-i18n="help_paragraph1">We are here to help you get the most out of the MRH Student App. If you encounter any problems or have any questions about using the app, please click the Contact Help Line button below.</p>
-            
-            <p data-i18n="help_paragraph2">For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the app.</p>
-            
+            <p data-i18n="help_paragraph1">We are here to help you get the most out of the MRH Student Apps. If you encounter any problems or have any questions about using the apps, please click the Contact Help Line button below.</p>
+            <p data-i18n="help_paragraph2">For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the apps.</p>
             <div class="help-line-btn-container">
                 <button id="help-line-btn" class="help-line-btn">
                     <i class="fas fa-headset"></i> <span data-i18n="help_button">Contact Help Line</span>
                 </button>
             </div>
-            
             <div class="help-footer">
-                <span data-i18n="footer_copyright">M.R.H Student App © 2025 | All Rights Reserved</span>
+                <span data-i18n="footer_copyright">M.R.H Student Apps © 2025 | All Rights Reserved</span>
             </div>
         </div>
     </div>
     
-    <!-- নেভিগেশন বার -->
+    <!-- নেভিগেশন বার (অপরিবর্তিত) -->
     <div class="nav-bar">
         <a href="#" class="nav-btn active" data-page="home-page">
             <i class="fas fa-home"></i>
             <span data-i18n="nav_home">Home</span>
         </a>
-        
+        <a href="#" class="nav-btn" data-page="calculator-page">
+            <i class="fas fa-calculator"></i>
+            <span data-i18n="nav_calculator">Calculator</span>
+        </a>
         <a href="#" class="nav-btn" data-page="about-page">
             <i class="fas fa-info-circle"></i>
             <span data-i18n="nav_about">About</span>
         </a>
-        
         <a href="#" class="nav-btn" data-page="help-page">
             <i class="fas fa-headset"></i>
             <span data-i18n="nav_help">Help</span>
@@ -699,19 +1104,15 @@
     </div>
 
     <script>
-        // ভাষা ডেটা
+        // ============ ভাষা ডেটা ============
         const translations = {
             en: {
-                // সাধারণ
-                "app_title": "M.R.H Student App",
-                "footer_copyright": "M.R.H Student App © 2025 | All Rights Reserved",
-                
-                // নেভিগেশন
+                "app_title": "M.R.H Student Apps",
+                "footer_copyright": "M.R.H Student Apps © 2025 | All Rights Reserved",
                 "nav_home": "Home",
+                "nav_calculator": "Calculator",
                 "nav_about": "About",
                 "nav_help": "Help",
-                
-                // ফিচার বাটন
                 "feature_registration": "Students Registration",
                 "feature_account": "Student Account",
                 "feature_result": "Result Check",
@@ -720,41 +1121,42 @@
                 "feature_mcq": "M.C.Q Exam",
                 "feature_idcard": "ID Card Login",
                 "feature_donation": "Donation Now",
-                
-                // এবাউট পেজ
-                "about_title": "About M.R.H Student App",
-                "about_paragraph1": "Welcome to the <strong>M.R.H Student App</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.",
+                // নতুন সাবস্ক্রিপশন বাটন
+                "feature_subscription": "Subscription Now",
+                "learning_tools": "Learning Tools",
+                "feature_match_solve": "Math Solve",
+                "feature_mcq_new": "MCQ",
+                // 3 Dot মেনু আইটেম
+                "authority_intro": "Authority Introduction",
+                "educational_video": "Our educational Video",
+                "our_apps": "Our apps",
+                // এবাউট
+                "about_title": "About M.R.H Student Apps",
+                "about_paragraph1": "Welcome to the <strong>M.R.H Student Apps</strong>, a comprehensive digital platform designed specifically for students to manage their academic journey efficiently. Our application brings together all essential academic tools and resources in one convenient place.",
                 "about_mission": "<strong>Mission:</strong> To revolutionize the student experience by integrating cutting-edge technology with education, making academic management more accessible, efficient, and user-friendly for students everywhere.",
-                "about_paragraph2": "The app offers a wide range of features including student registration, account management, result checking, notifications, VIP services, and MCQ exam preparation. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.",
+                "about_paragraph2": "The apps offer a wide range of features including student registration, account management, result checking, notifications, VIP services, MCQ exam preparation, a professional calculator, and learning tools like Math Solve and MCQ practice. Each feature is designed with students' needs in mind, providing intuitive interfaces and seamless functionality.",
                 "about_paragraph3": "Our platform is constantly evolving with regular updates and new features based on user feedback. We are committed to providing the best possible experience for students and educators alike.",
                 "developer_authority": "M.R.H Online Authority",
                 "developer_version": "Version:",
                 "developer_date": "Release Date:",
                 "developer_creator": "Creator:",
-                
-                // হেল্প পেজ
                 "help_title": "Help & Support",
-                "help_paragraph1": "We are here to help you get the most out of the MRH Student App. If you encounter any problems or have any questions about using the app, please click the Contact Help Line button below.",
-                "help_paragraph2": "For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the app.",
+                "help_paragraph1": "We are here to help you get the most out of the MRH Student Apps. If you encounter any problems or have any questions about using the apps, please click the Contact Help Line button below.",
+                "help_paragraph2": "For direct assistance, you can contact our support team through the help line. Our support staff is available to help you with any questions or concerns you may have about the apps.",
                 "help_button": "Contact Help Line",
-                
-                // এলার্ট বার্তা
+                "calculator_note": "Professional Calculator | Easy & Accurate",
                 "link_not_added": "The link for \"{feature}\" has not been added yet. Please contact the admin to add the link.",
                 "helpline_not_added": "Helpline link has not been added yet. Please contact the admin to add the link.",
                 "link_updated": "Link for \"{feature}\" has been successfully updated!",
                 "helpline_updated": "Helpline link has been successfully updated!"
             },
             bn: {
-                // সাধারণ
-                "app_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ",
-                "footer_copyright": "এম.আর.এইচ স্টুডেন্ট অ্যাপ © ২০২৫ | সর্বস্বত্ব সংরক্ষিত",
-                
-                // নেভিগেশন
+                "app_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স",
+                "footer_copyright": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স © ২০২৫ | সর্বস্বত্ব সংরক্ষিত",
                 "nav_home": "হোম",
+                "nav_calculator": "ক্যালকুলেটর",
                 "nav_about": "সম্পর্কে",
                 "nav_help": "সহায়তা",
-                
-                // ফিচার বাটন
                 "feature_registration": "ছাত্র নিবন্ধন",
                 "feature_account": "ছাত্র অ্যাকাউন্ট",
                 "feature_result": "ফলাফল দেখুন",
@@ -763,25 +1165,30 @@
                 "feature_mcq": "এম.সি.কিউ পরীক্ষা",
                 "feature_idcard": "আইডি কার্ড লগইন",
                 "feature_donation": "অনুদান করুন",
-                
-                // এবাউট পেজ
-                "about_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ সম্পর্কে",
-                "about_paragraph1": "<strong>এম.আর.এইচ স্টুডেন্ট অ্যাপ</strong>-এ স্বাগতম, একটি সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম যা বিশেষভাবে শিক্ষার্থীদের তাদের একাডেমিক যাত্রা দক্ষতার সাথে পরিচালনা করার জন্য ডিজাইন করা হয়েছে। আমাদের অ্যাপ্লিকেশন একটি সুবিধাজনক জায়গায় সমস্ত প্রয়োজনীয় একাডেমিক সরঞ্জাম এবং সম্পদ একত্রিত করে।",
+                // নতুন সাবস্ক্রিপশন বাটন
+                "feature_subscription": "সাবস্ক্রিপশন নিন",
+                "learning_tools": "লার্নিং টুলস",
+                "feature_match_solve": "গণিত সলভ",
+                "feature_mcq_new": "এমসিকিউ",
+                // 3 Dot মেনু আইটেম
+                "authority_intro": "কর্তৃপক্ষের পরিচয়",
+                "educational_video": "আমাদের শিক্ষনীয় ভিডিও",
+                "our_apps": "আমাদের অ্যাপ্স",
+                // এবাউট
+                "about_title": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স সম্পর্কে",
+                "about_paragraph1": "<strong>এম.আর.এইচ স্টুডেন্ট অ্যাপ্স</strong>-এ স্বাগতম, একটি সম্পূর্ণ ডিজিটাল প্ল্যাটফর্ম যা বিশেষভাবে শিক্ষার্থীদের তাদের একাডেমিক যাত্রা দক্ষতার সাথে পরিচালনা করার জন্য ডিজাইন করা হয়েছে। আমাদের অ্যাপ্লিকেশন একটি সুবিধাজনক জায়গায় সমস্ত প্রয়োজনীয় একাডেমিক সরঞ্জাম এবং সম্পদ একত্রিত করে।",
                 "about_mission": "<strong>মিশন:</strong> শিক্ষাকে অত্যাধুনিক প্রযুক্তির সাথে একীভূত করে শিক্ষার্থীর অভিজ্ঞতা বিপ্লবী করতে, যাতে একাডেমিক ব্যবস্থাপনা সর্বত্র শিক্ষার্থীদের জন্য আরও প্রবেশযোগ্য, দক্ষ এবং ব্যবহারকারী-বান্ধব হয়।",
-                "about_paragraph2": "অ্যাপটি শিক্ষার্থী নিবন্ধন, অ্যাকাউন্ট ব্যবস্থাপনা, ফলাফল পরীক্ষা, বিজ্ঞপ্তি, ভিআইপি পরিষেবা এবং এমসিকিউ পরীক্ষার প্রস্তুতি সহ বিস্তৃত বৈশিষ্ট্য অফার করে। প্রতিটি বৈশিষ্ট্য শিক্ষার্থীদের চাহিদা মাথায় রেখে ডিজাইন করা হয়েছে, স্বজ্ঞাত ইন্টারফেস এবং নির্বিঘ্ন কার্যকারিতা প্রদান করে।",
+                "about_paragraph2": "অ্যাপ্সটি শিক্ষার্থী নিবন্ধন, অ্যাকাউন্ট ব্যবস্থাপনা, ফলাফল পরীক্ষা, বিজ্ঞপ্তি, ভিআইপি পরিষেবা, এমসিকিউ পরীক্ষার প্রস্তুতি, একটি প্রফেশনাল ক্যালকুলেটর এবং লার্নিং টুলস যেমন গণিত সলভ ও এমসিকিউ সহ বিস্তৃত বৈশিষ্ট্য অফার করে। প্রতিটি বৈশিষ্ট্য শিক্ষার্থীদের চাহিদা মাথায় রেখে ডিজাইন করা হয়েছে, স্বজ্ঞাত ইন্টারফেস এবং নির্বিঘ্ন কার্যকারিতা প্রদান করে।",
                 "about_paragraph3": "ব্যবহারকারীদের প্রতিক্রিয়ার ভিত্তিতে নিয়মিত আপডেট এবং নতুন বৈশিষ্ট্যগুলির সাথে আমাদের প্ল্যাটফর্ম ক্রমাগত বিকশিত হচ্ছে। আমরা শিক্ষার্থী এবং শিক্ষক উভয়ের জন্য সর্বোত্তম সম্ভাব্য অভিজ্ঞতা প্রদানের জন্য প্রতিশ্রুতিবদ্ধ।",
                 "developer_authority": "এম.আর.এইচ অনলাইন অথরিটি",
                 "developer_version": "সংস্করণ:",
                 "developer_date": "মুক্তির তারিখ:",
                 "developer_creator": "স্রষ্টা:",
-                
-                // হেল্প পেজ
                 "help_title": "সহায়তা ও সমর্থন",
-                "help_paragraph1": "আমরা আপনাকে এম.আর.এইচ স্টুডেন্ট অ্যাপ থেকে সর্বাধিক সুবিধা পেতে সাহায্য করতে এখানে আছি। আপনি যদি অ্যাপটি ব্যবহার সম্পর্কিত কোন সমস্যার সম্মুখীন হন বা কোন প্রশ্ন থাকে, দয়া করে নিচের \"হেল্পলাইন যোগাযোগ করুন\" বাটনে ক্লিক করুন।",
-                "help_paragraph2": "সরাসরি সহায়তার জন্য, আপনি হেল্পলাইনের মাধ্যমে আমাদের সমর্থন টিমের সাথে যোগাযোগ করতে পারেন। আমাদের সমর্থন কর্মীরা অ্যাপ সম্পর্কিত আপনার যে কোন প্রশ্ন বা উদ্বেগের সমাধানে সহায়তা করার জন্য উপলব্ধ।",
+                "help_paragraph1": "আমরা আপনাকে এম.আর.এইচ স্টুডেন্ট অ্যাপ্স থেকে সর্বাধিক সুবিধা পেতে সাহায্য করতে এখানে আছি। আপনি যদি অ্যাপ্সটি ব্যবহার সম্পর্কিত কোন সমস্যার সম্মুখীন হন বা কোন প্রশ্ন থাকে, দয়া করে নিচের \"হেল্পলাইন যোগাযোগ করুন\" বাটনে ক্লিক করুন।",
+                "help_paragraph2": "সরাসরি সহায়তার জন্য, আপনি হেল্পলাইনের মাধ্যমে আমাদের সমর্থন টিমের সাথে যোগাযোগ করতে পারেন। আমাদের সমর্থন কর্মীরা অ্যাপ্স সম্পর্কিত আপনার যে কোন প্রশ্ন বা উদ্বেগের সমাধানে সহায়তা করার জন্য উপলব্ধ।",
                 "help_button": "হেল্পলাইন যোগাযোগ করুন",
-                
-                // এলার্ট বার্তা
+                "calculator_note": "প্রফেশনাল ক্যালকুলেটর | সহজ ও নির্ভুল হিসাব",
                 "link_not_added": "\"{feature}\" এর লিংক এখনো যোগ করা হয়নি। লিংক যোগ করার জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।",
                 "helpline_not_added": "হেল্পলাইন লিংক এখনো যোগ করা হয়নি। লিংক যোগ করার জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।",
                 "link_updated": "\"{feature}\" এর লিংক সফলভাবে আপডেট করা হয়েছে!",
@@ -789,7 +1196,7 @@
             }
         };
 
-        // ফিচার বাটনের লিংক
+        // ============ ফিচার বাটনের লিংক ============
         const featureLinks = {
             "registration-link": "https://mrhonlineauthority.github.io/studentsite/",
             "account-link": "https://mrhonlineauthority.github.io/signuplogin/vipaccount.html",
@@ -798,7 +1205,15 @@
             "vip-link": "https://mrhonlineauthority.github.io/signuplogin/",
             "mcq-link": "https://forms.gle/ZX25P9V3dZKZ3CDr9",
             "idcard-link": "https://mrhonlineauthority.github.io/idcard",
-            "donation-link": "https://mrhonlineauthority.github.io"
+            "donation-link": "https://mrhonlineauthority.github.io",
+            "match-solve-link": "https://mrhonlineauthority.github.io/apps/mathsolve.html",
+            "mcq-new-link": "#",
+            // নতুন সাবস্ক্রিপশন লিংক (পরে আপডেট করবেন)
+            "subscription-link": "#",
+            // সাইডবার মেনু আইটেম
+            "authority-link": "https://mrhonlineauthority.github.io/apps/authorityintroduction.html",
+            "educational-video-link": "https://mrhonlineauthority.github.io/apps/ouredicationalvideo.html",
+            "apps-link": "#"
         };
         
         // হেল্প লাইন লিংক
@@ -812,36 +1227,121 @@
         let imageFadeInterval;
         const images = document.querySelectorAll('.fading-image');
         
+        // ক্যালকুলেটর স্টেট
+        let calcDisplay = document.getElementById('calc-display');
+        let currentInput = '0';
+        
+        // ============ সাইডবার মেনু কন্ট্রোল ============
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const overlay = document.getElementById('menuOverlay');
+            
+            // মেনু খোলার ফাংশন
+            function openMenu() {
+                sideMenu.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // স্ক্রল বন্ধ
+            }
+            
+            // মেনু বন্ধ করার ফাংশন
+            function closeMenu() {
+                sideMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = ''; // স্ক্রল চালু
+            }
+            
+            // মেনু টগল আইকনে ক্লিক
+            menuToggle.addEventListener('click', openMenu);
+            
+            // ক্রস বাটনে ক্লিক
+            closeMenuBtn.addEventListener('click', closeMenu);
+            
+            // ওভারলে ক্লিক করলে মেনু বন্ধ
+            overlay.addEventListener('click', closeMenu);
+            
+            // মেনু আইটেমে ক্লিক করলে লিংক ওপেন এবং মেনু বন্ধ
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const linkKey = this.getAttribute('data-link');
+                    if (featureLinks[linkKey] && featureLinks[linkKey] !== "#") {
+                        window.open(featureLinks[linkKey], '_blank');
+                    } else {
+                        const featureName = this.querySelector('span').textContent;
+                        const alertMessage = translations[currentLang]['link_not_added'].replace('{feature}', featureName);
+                        alert(alertMessage);
+                    }
+                    closeMenu(); // মেনু বন্ধ
+                });
+            });
+        });
+        
+        // ============ ক্যালকুলেটর ফাংশন ============
+        window.appendCalc = function(value) {
+            if (!calcDisplay) calcDisplay = document.getElementById('calc-display');
+            if (currentInput === '0' && value !== '.') {
+                currentInput = value;
+            } else {
+                const lastChar = currentInput.slice(-1);
+                if ('+-*/'.includes(lastChar) && '+-*/'.includes(value)) {
+                    currentInput = currentInput.slice(0, -1) + value;
+                } else {
+                    currentInput += value;
+                }
+            }
+            calcDisplay.textContent = currentInput;
+        };
+        
+        window.clearCalc = function() {
+            currentInput = '0';
+            if (calcDisplay) calcDisplay.textContent = currentInput;
+        };
+        
+        window.backspaceCalc = function() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            if (calcDisplay) calcDisplay.textContent = currentInput;
+        };
+        
+        window.calculateResult = function() {
+            try {
+                let expression = currentInput.replace(/×/g, '*').replace(/−/g, '-');
+                let result = Function('"use strict";return (' + expression + ')')();
+                currentInput = String(result);
+                if (calcDisplay) calcDisplay.textContent = currentInput;
+            } catch (e) {
+                if (calcDisplay) calcDisplay.textContent = 'Error';
+                currentInput = '0';
+            }
+        };
+        
         // ফেডিং ইমেজ ফাংশন
         function startImageFading() {
-            // প্রতি ৩ সেকেন্ডে ইমেজ পরিবর্তন (৩ সেকেন্ড দেখানো + ১ সেকেন্ড ট্রানজিশন)
+            if (imageFadeInterval) clearInterval(imageFadeInterval);
             imageFadeInterval = setInterval(() => {
-                // বর্তমান ইমেজ ফেড আউট করুন
                 images[currentImageIndex].classList.remove('active');
-                
-                // পরবর্তী ইমেজ ইনডেক্স নির্ধারণ
                 currentImageIndex = (currentImageIndex + 1) % images.length;
-                
-                // ১ সেকেন্ড পর নতুন ইমেজ ফেড ইন করুন
                 setTimeout(() => {
                     images[currentImageIndex].classList.add('active');
                 }, 1000);
-                
-            }, 4000); // মোট ৪ সেকেন্ড (৩ সেকেন্ড দেখানো + ১ সেকেন্ড ট্রানজিশন)
+            }, 4000);
         }
         
-        // ইমেজ ফেডিং বন্ধ করা
         function stopImageFading() {
             if (imageFadeInterval) {
                 clearInterval(imageFadeInterval);
+                imageFadeInterval = null;
             }
         }
         
         // ভাষা পরিবর্তন ফাংশন
         function changeLanguage(lang) {
             currentLang = lang;
-            
-            // ভাষা বাটন আপডেট
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.getAttribute('data-lang') === lang) {
@@ -849,11 +1349,10 @@
                 }
             });
             
-            // সব টেক্সট আপডেট
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
-                    if (element.tagName === 'SPAN' || element.tagName === 'DIV' || element.tagName === 'P' || element.tagName === 'H2') {
+                    if (element.tagName === 'SPAN' || element.tagName === 'DIV' || element.tagName === 'P' || element.tagName === 'H2' || element.tagName === 'H3') {
                         element.innerHTML = translations[lang][key];
                     } else {
                         element.textContent = translations[lang][key];
@@ -861,27 +1360,37 @@
                 }
             });
             
-            // লোকালস্টোরেজে সংরক্ষণ
             localStorage.setItem('mrh_app_lang', lang);
-            
-            console.log(`🌐 Language changed to: ${lang === 'en' ? 'English' : 'বাংলা'}`);
         }
         
         // ডকুমেন্ট লোড হলে
         document.addEventListener('DOMContentLoaded', function() {
-            // লোকালস্টোরেজ থেকে ভাষা লোড
+            calcDisplay = document.getElementById('calc-display');
+            
             const savedLang = localStorage.getItem('mrh_app_lang');
             if (savedLang && (savedLang === 'en' || savedLang === 'bn')) {
                 changeLanguage(savedLang);
             }
             
-            // ফেডিং ইমেজ শুরু করুন
             startImageFading();
             
-            // পেজ পরিবর্তন হলে ইমেজ ফেডিং কন্ট্রোল
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+            // নেভিগেশন বাটন ইভেন্ট
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const pages = document.querySelectorAll('.page');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const targetPage = this.getAttribute('data-page');
+                    
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    pages.forEach(page => page.classList.remove('active'));
+                    document.getElementById(targetPage).classList.add('active');
+                    
+                    history.pushState(null, null, `#${targetPage}`);
+                    
                     if (targetPage === 'home-page') {
                         startImageFading();
                     } else {
@@ -898,41 +1407,25 @@
                 });
             });
             
-            // নেভিগেশন বাটন ইভেন্ট
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const pages = document.querySelectorAll('.page');
-            
-            navButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetPage = this.getAttribute('data-page');
-                    
-                    // অ্যাকটিভ ক্লাস আপডেট
-                    navButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // পেজ আপডেট
-                    pages.forEach(page => page.classList.remove('active'));
-                    document.getElementById(targetPage).classList.add('active');
-                    
-                    // URL আপডেট (ব্রাউজার হিস্ট্রি জন্য)
-                    history.pushState(null, null, `#${targetPage}`);
-                });
-            });
-            
-            // ফিচার বাটন ইভেন্ট
-            const featureButtons = document.querySelectorAll('.feature-btn');
-            
-            featureButtons.forEach(button => {
+            // ফিচার বাটন ইভেন্ট (সবগুলো)
+            document.querySelectorAll('.feature-btn').forEach(button => {
                 button.addEventListener('click', function(e) {
                     const linkKey = this.getAttribute('data-link');
                     
+                    // বিশেষ কেস: সাবস্ক্রিপশন বাটন (এখনই কাজ করে না)
+                    if (linkKey === 'subscription-link') {
+                        e.preventDefault();
+                        const msg = currentLang === 'en' 
+                            ? "This feature is not yet enabled! This feature is under development. Please wait." 
+                            : "এই ফিচার এখনও ইনেবল হয়নি! এই ফিচারে কাজ চলছে দয়া করে অপেক্ষা করুন।";
+                        alert(msg);
+                        return;
+                    }
+                    
+                    // অন্যান্য বাটনের জন্য স্বাভাবিক লজিক
                     if (featureLinks[linkKey] && featureLinks[linkKey] !== "#") {
-                        // লিংক থাকলে সেই লিংকে যাবে
                         window.open(featureLinks[linkKey], '_blank');
                     } else {
-                        // লিংক না থাকলে বার্তা দেখাবে
                         e.preventDefault();
                         const featureName = this.querySelector('span').textContent;
                         const alertMessage = translations[currentLang]['link_not_added'].replace('{feature}', featureName);
@@ -942,23 +1435,18 @@
             });
             
             // হেল্প লাইন বাটন ইভেন্ট
-            const helpLineBtn = document.getElementById('help-line-btn');
-            
-            helpLineBtn.addEventListener('click', function() {
+            document.getElementById('help-line-btn').addEventListener('click', function() {
                 if (helpLineLink && helpLineLink !== "#") {
-                    // হেল্প লাইন লিংক থাকলে সেই লিংকে যাবে
                     window.open(helpLineLink, '_blank');
                 } else {
-                    // হেল্প লাইন লিংক না থাকলে বার্তা দেখাবে
                     alert(translations[currentLang]['helpline_not_added']);
                 }
             });
             
-            // ব্রাউজার ব্যাক/ফরোয়ার্ড বাটন হ্যান্ডেল
+            // ব্রাউজার ব্যাক/ফরোয়ার্ড হ্যান্ডেল
             window.addEventListener('popstate', function() {
                 const hash = window.location.hash.substring(1) || 'home-page';
                 
-                // নেভিগেশন বাটন আপডেট
                 navButtons.forEach(btn => {
                     btn.classList.remove('active');
                     if (btn.getAttribute('data-page') === hash) {
@@ -966,11 +1454,11 @@
                     }
                 });
                 
-                // পেজ আপডেট
                 pages.forEach(page => page.classList.remove('active'));
-                document.getElementById(hash).classList.add('active');
+                if (document.getElementById(hash)) {
+                    document.getElementById(hash).classList.add('active');
+                }
                 
-                // হোম পেজে ফিরে আসলে ফেডিং শুরু করুন
                 if (hash === 'home-page') {
                     startImageFading();
                 } else {
@@ -984,59 +1472,35 @@
                 navButtons.forEach(btn => btn.classList.remove('active'));
                 pages.forEach(page => page.classList.remove('active'));
                 
-                document.querySelector(`.nav-btn[data-page="${initialHash}"]`).classList.add('active');
+                const targetNav = document.querySelector(`.nav-btn[data-page="${initialHash}"]`);
+                if (targetNav) targetNav.classList.add('active');
                 document.getElementById(initialHash).classList.add('active');
                 
-                // হোম পেজ না হলে ফেডিং বন্ধ করুন
                 if (initialHash !== 'home-page') {
                     stopImageFading();
                 }
             }
             
-            // লিংক আপডেট করার জন্য ফাংশন
+            // লিংক আপডেট ফাংশন
             window.updateFeatureLink = function(featureKey, newLink) {
                 if (featureLinks.hasOwnProperty(featureKey)) {
                     featureLinks[featureKey] = newLink;
                     console.log(`✅ "${featureKey}" লিংক আপডেট হয়েছে: ${newLink}`);
-                    
-                    // সফলতা বার্তা
-                    const successMessage = translations[currentLang]['link_updated'].replace('{feature}', featureKey);
-                    alert(successMessage);
+                    alert(translations[currentLang]['link_updated'].replace('{feature}', featureKey));
                     return true;
                 }
-                console.error(`❌ "${featureKey}" নামে কোনো ফিচার নেই`);
                 alert(`❌ "${featureKey}" নামে কোনো ফিচার নেই`);
                 return false;
             };
             
-            // হেল্প লাইন লিংক আপডেট করার ফাংশন
             window.updateHelpLineLink = function(newLink) {
                 helpLineLink = newLink;
                 console.log(`✅ হেল্পলাইন লিংক আপডেট হয়েছে: ${newLink}`);
-                
-                // সফলতা বার্তা
                 alert(translations[currentLang]['helpline_updated']);
             };
             
-            // ফেডিং ইমেজ কন্ট্রোল ফাংশন
-            window.startImageFading = function() {
-                startImageFading();
-                console.log("🖼️ Image fading started");
-            };
-            
-            window.stopImageFading = function() {
-                stopImageFading();
-                console.log("🖼️ Image fading stopped");
-            };
-            
-            // প্রারম্ভিক বার্তা
-            console.log("🎓 M.R.H Student App লোড হয়েছে!");
-            console.log("🖼️ ফেডিং ইমেজ শুরু হয়েছে (৩ সেকেন্ড দেখানো, ১ সেকেন্ড ট্রানজিশন)");
-            console.log("🌐 ভাষা পরিবর্তন করতে উপরের বাটনে ক্লিক করুন");
-            console.log("🔗 ফিচার লাইন আপডেট করতে: updateFeatureLink('ফিচার-কী', 'আপনার-লিংক')");
-            console.log("📞 হেল্পলাইন লিংক আপডেট করতে: updateHelpLineLink('আপনার-হেল্প-লিংক')");
-            console.log("🖼️ ইমেজ ফেডিং কন্ট্রোল: startImageFading(), stopImageFading()");
-            console.log("📋 ফিচার কী গুলো: registration-link, account-link, result-link, press-link, vip-link, mcq-link, idcard-link, donation-link");
+            console.log("🎓 M.R.H Student Apps লোড হয়েছে! সাইডবার মেনু আপডেট সম্পন্ন হয়েছে।");
+            console.log("📋 ফিচার কী: registration-link, account-link, result-link, press-link, vip-link, mcq-link, idcard-link, donation-link, match-solve-link, mcq-new-link, subscription-link, authority-link, educational-video-link, apps-link");
         });
     </script>
 </body>
