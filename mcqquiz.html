@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>MCQ Quiz | M.R.H Student Apps</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #eef2f5 100%);
+            font-family: 'Inter', 'Noto Sans Bengali', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            padding: 30px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+
+        /* ভাষা টগল বাটন */
+        .lang-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            background: #eef2f7;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            letter-spacing: 0.3px;
+        }
+
+        .lang-btn:hover {
+            background: #e1e6ed;
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #1a237e;
+            color: white;
+            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.3);
+        }
+
+        /* হেডার */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header-section h1 {
+            color: #1a237e;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header-section h1 i {
+            color: #ff5722;
+            font-size: 40px;
+            filter: drop-shadow(0 6px 8px rgba(255, 87, 34, 0.2));
+        }
+
+        /* নাম ফর্ম - আরও ছোট করা হয়েছে */
+        .name-form {
+            background: #f8faff;
+            border-radius: 30px;
+            padding: 15px; /* আগে 20px ছিল */
+            margin-bottom: 25px;
+            text-align: center;
+            border: 2px dashed #1a237e;
+        }
+
+        .name-form h3 {
+            color: #1a237e;
+            font-size: 20px; /* আগে 24px ছিল */
+            margin-bottom: 12px; /* আগে 15px ছিল */
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* আগে 12px ছিল */
+            justify-content: center;
+            margin-bottom: 0;
+        }
+
+        .name-input {
+            flex: 1;
+            min-width: 200px; /* আগে 220px ছিল */
+            padding: 10px 15px; /* আগে 12px 18px ছিল */
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 14px; /* আগে 16px ছিল */
+            font-weight: 500;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .name-input:focus {
+            border-color: #1a237e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px; /* আগে 12px 30px ছিল */
+            font-size: 16px; /* আগে 18px ছিল */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 18px rgba(26, 35, 126, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* আগে 10px ছিল */
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(26, 35, 126, 0.35);
+        }
+
+        /* কুইজ এলাকা */
+        .quiz-area {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8faff;
+            border-radius: 30px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.03);
+            border: 1px solid rgba(26,35,126,0.1);
+        }
+
+        .score-box, .timer-box, .step-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .score-box i, .timer-box i, .step-box i {
+            color: #ff5722;
+            font-size: 22px;
+        }
+
+        #score {
+            font-weight: 700;
+            color: #1a237e;
+        }
+
+        #timer {
+            font-weight: 700;
+            color: #f44336;
+        }
+
+        #step {
+            font-weight: 700;
+            color: #1a237e;
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 14px 18px;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover {
+            border-color: #1a237e;
+            background: #f5f7fa;
+        }
+
+        .option-item.selected {
+            border-color: #1a237e;
+            background: #e8eaf6;
+            box-shadow: 0 5px 12px rgba(26,35,126,0.1);
+        }
+
+        .option-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #1a237e;
+            cursor: pointer;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 18px rgba(26, 35, 126, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(26, 35, 126, 0.35);
+        }
+
+        .btn:disabled {
+            background: #b0bec5;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #ff9800;
+            box-shadow: 0 8px 18px rgba(255,152,0,0.25);
+        }
+
+        .btn-secondary:hover {
+            background: #fb8c00;
+        }
+
+        .result-area {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-header h2 {
+            color: #1a237e;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .result-id {
+            color: #ff5722;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .result-name {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .result-header p {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .result-details {
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background: #f9f9f9;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .result-item.incorrect {
+            border-left-color: #f44336;
+        }
+
+        .result-item p {
+            margin-bottom: 5px;
+        }
+
+        .result-question {
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .result-user {
+            color: #333;
+        }
+
+        .result-correct {
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        .result-item.incorrect .result-correct {
+            color: #f44336;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        /* রেস্পন্সিভ */
+        @media (max-width: 550px) {
+            .container {
+                padding: 25px 18px;
+            }
+            .header-section h1 {
+                font-size: 30px;
+            }
+            .stats-panel {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .question-text {
+                font-size: 20px;
+            }
+            .option-item {
+                padding: 12px 15px;
+            }
+            .option-text {
+                font-size: 16px;
+            }
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            .name-form {
+                padding: 12px; /* আরও ছোট */
+            }
+            .input-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .name-input {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stats-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ভাষা টগল বাটন -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-en">English</button>
+            <button class="lang-btn" id="lang-bn">বাংলা</button>
+        </div>
+
+        <!-- হেডার -->
+        <div class="header-section">
+            <h1>
+                <i class="fas fa-clipboard-list"></i>
+                <span data-i18n="title">MCQ Quiz</span>
+            </h1>
+        </div>
+
+        <!-- নাম ফর্ম (ছোট করা হয়েছে) -->
+        <div id="nameForm" class="name-form">
+            <h3 data-i18n="enter_name">Please enter your name</h3>
+            <div class="input-group">
+                <input type="text" id="userNameInput" class="name-input" placeholder="Your name" autocomplete="off">
+                <button id="startQuizBtn" class="start-btn">
+                    <i class="fas fa-play"></i> <span data-i18n="start">Start</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- কুইজ এলাকা -->
+        <div id="quizArea" class="quiz-area">
+            <div class="stats-panel">
+                <div class="score-box">
+                    <i class="fas fa-star"></i>
+                    <span data-i18n="score">Score</span>: <span id="score">0</span>/5
+                </div>
+                <div class="timer-box">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span data-i18n="time_left">Time Left</span>: <span id="timer">05:00</span>
+                </div>
+                <div class="step-box">
+                    <i class="fas fa-step-forward"></i>
+                    <span data-i18n="step">Step</span>: <span id="step">1</span>/5
+                </div>
+            </div>
+
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsContainer" class="options-list"></div>
+
+            <div class="nav-buttons">
+                <button id="prevBtn" class="btn" disabled>
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="previous">Previous</span>
+                </button>
+                <button id="nextBtn" class="btn" disabled>
+                    <span data-i18n="next">Next</span> <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ফলাফল এলাকা -->
+        <div id="resultArea" class="result-area">
+            <div class="result-card">
+                <div class="result-header">
+                    <h2 id="resultTitle"></h2>
+                    <div id="resultId" class="result-id"></div>
+                    <div id="resultName" class="result-name"></div>
+                    <p id="resultSummary"></p>
+                </div>
+                <div id="resultDetails" class="result-details"></div>
+                <button id="restartBtn" class="btn btn-secondary" style="width: 100%;">
+                    <i class="fas fa-redo-alt"></i> <span data-i18n="restart">Restart Quiz</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ফুটার -->
+        <div class="footer-note">
+            <i class="fas fa-heart" style="color: #f44336;"></i> 
+            <span data-i18n="footer">M.R.H Student Apps – Test Your Knowledge</span>
+            <i class="fas fa-heart" style="color: #f44336;"></i>
+        </div>
+    </div>
+
+    <script>
+        // ============ ভাষা ডেটা ============
+        const translations = {
+            en: {
+                "title": "MCQ Quiz",
+                "enter_name": "Please enter your name",
+                "start": "Start",
+                "score": "Score",
+                "time_left": "Time Left",
+                "step": "Step",
+                "previous": "Previous",
+                "next": "Next",
+                "restart": "Restart Quiz",
+                "footer": "M.R.H Student Apps – Test Your Knowledge",
+                "congrats": "🎉 Congratulations!",
+                "score_message": "You got {score} out of 5 correct.",
+                "try_again": "😔 Keep Practicing!",
+                "time_up": "⏰ Time is up!",
+                "your_answer": "Your answer: {answer}",
+                "correct_answer": "Correct answer: {answer}",
+                "question_prefix": "Question {num}:",
+                "please_select": "Please select an option first!",
+                "answer_all": "Please answer all questions before submitting!",
+                "enter_name_alert": "Please enter your name to start the quiz!",
+                "id_prefix": "ID: #{id}"
+            },
+            bn: {
+                "title": "এমসিকিউ কুইজ",
+                "enter_name": "আপনার নাম লিখুন",
+                "start": "শুরু",
+                "score": "স্কোর",
+                "time_left": "বাকি সময়",
+                "step": "ধাপ",
+                "previous": "পূর্ববর্তী",
+                "next": "পরবর্তী",
+                "restart": "আবার শুরু করুন",
+                "footer": "এম.আর.এইচ স্টুডেন্ট অ্যাপ্স – তোমার জ্ঞান যাচাই করো",
+                "congrats": "🎉 অভিনন্দন!",
+                "score_message": "তুমি ৫ এর মধ্যে {score} টি সঠিক উত্তর দিয়েছ।",
+                "try_again": "😔 আরও অনুশীলন করুন!",
+                "time_up": "⏰ সময় শেষ!",
+                "your_answer": "আপনার উত্তর: {answer}",
+                "correct_answer": "সঠিক উত্তর: {answer}",
+                "question_prefix": "প্রশ্ন {num}:",
+                "please_select": "দয়া করে প্রথমে একটি অপশন নির্বাচন করুন!",
+                "answer_all": "সাবমিট করার আগে সব প্রশ্নের উত্তর দিন!",
+                "enter_name_alert": "কুইজ শুরু করতে আপনার নাম লিখুন!",
+                "id_prefix": "আইডি: #{id}"
+            }
+        };
+
+        // ============ মূল প্রশ্ন ব্যাংক (১০টি করে) ============
+        const baseQuestionsEn = [
+            { question: "What is the capital of France?", options: ["London", "Paris", "Berlin", "Madrid"], answer: 1 },
+            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 1 },
+            { question: "What is the largest ocean on Earth?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: 3 },
+            { question: "Who wrote 'Romeo and Juliet'?", options: ["Charles Dickens", "William Shakespeare", "Mark Twain", "Jane Austen"], answer: 1 },
+            { question: "What is the square root of 64?", options: ["6", "7", "8", "9"], answer: 2 },
+            { question: "What is the chemical symbol for water?", options: ["O2", "H2O", "CO2", "NaCl"], answer: 1 },
+            { question: "Which country is known as the Land of the Rising Sun?", options: ["China", "Japan", "Thailand", "India"], answer: 1 },
+            { question: "Who painted the Mona Lisa?", options: ["Van Gogh", "Picasso", "Da Vinci", "Rembrandt"], answer: 2 },
+            { question: "What is the smallest prime number?", options: ["0", "1", "2", "3"], answer: 2 },
+            { question: "Which animal is known as the King of the Jungle?", options: ["Tiger", "Lion", "Elephant", "Giraffe"], answer: 1 }
+        ];
+
+        const baseQuestionsBn = [
+            { question: "ফ্রান্সের রাজধানী কি?", options: ["লন্ডন", "প্যারিস", "বার্লিন", "মাদ্রিদ"], answer: 1 },
+            { question: "লাল গ্রহ নামে পরিচিত কোন গ্রহ?", options: ["পৃথিবী", "মঙ্গল", "বৃহস্পতি", "শুক্র"], answer: 1 },
+            { question: "পৃথিবীর বৃহত্তম মহাসাগর কোনটি?", options: ["আটলান্টিক", "ভারত", "উত্তর মহাসাগর", "প্রশান্ত"], answer: 3 },
+            { question: "'রোমিও অ্যান্ড জুলিয়েট' এর লেখক কে?", options: ["চার্লস ডিকেন্স", "উইলিয়াম শেক্সপিয়ার", "মার্ক টোয়েইন", "জেন অস্টিন"], answer: 1 },
+            { question: "৬৪ এর বর্গমূল কত?", options: ["৬", "৭", "৮", "৯"], answer: 2 },
+            { question: "পানির রাসায়নিক সংকেত কি?", options: ["O2", "H2O", "CO2", "NaCl"], answer: 1 },
+            { question: "উদীয়মান সূর্যের দেশ নামে পরিচিত কোন দেশ?", options: ["চীন", "জাপান", "থাইল্যান্ড", "ভারত"], answer: 1 },
+            { question: "মোনালিসা চিত্রকর্মটি এঁকেছিলেন কে?", options: ["ভ্যান গখ", "পিকাসো", "দ্য ভিঞ্চি", "রেমব্রান্ট"], answer: 2 },
+            { question: "ক্ষুদ্রতম মৌলিক সংখ্যা কোনটি?", options: ["০", "১", "২", "৩"], answer: 2 },
+            { question: "জঙ্গলের রাজা হিসেবে পরিচিত কোন প্রাণী?", options: ["বাঘ", "সিংহ", "হাতি", "জিরাফ"], answer: 1 }
+        ];
+
+        // বর্তমান ভাষা ও প্রশ্ন সেট
+        let currentLang = localStorage.getItem('mcqLang') || 'bn';
+        let currentBaseQuestions = currentLang === 'en' ? baseQuestionsEn : baseQuestionsBn;
+
+        // কুইজ স্টেট
+        let questions = [];
+        let userAnswers = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 300;
+        let timerInterval;
+        let quizEnded = false;
+        let currentUserName = '';
+        let currentQuizId = '';
+
+        // DOM এলিমেন্ট
+        const nameForm = document.getElementById('nameForm');
+        const quizArea = document.getElementById('quizArea');
+        const resultArea = document.getElementById('resultArea');
+        const userNameInput = document.getElementById('userNameInput');
+        const startBtn = document.getElementById('startQuizBtn');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const scoreSpan = document.getElementById('score');
+        const timerSpan = document.getElementById('timer');
+        const stepSpan = document.getElementById('step');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultId = document.getElementById('resultId');
+        const resultName = document.getElementById('resultName');
+        const resultSummary = document.getElementById('resultSummary');
+        const resultDetails = document.getElementById('resultDetails');
+
+        // এলোমেলো ৬-সংখ্যার আইডি জেনারেট
+        function generateQuizId() {
+            const num = Math.floor(100000 + Math.random() * 900000);
+            return `#${num}`;
+        }
+
+        // এলোমেলোভাবে ৫টি প্রশ্ন নির্বাচন
+        function selectRandomQuestions(count = 5) {
+            const base = currentBaseQuestions;
+            let indices = Array.from({ length: base.length }, (_, i) => i);
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            const selectedIndices = indices.slice(0, count);
+            return selectedIndices.map(idx => ({
+                ...base[idx],
+                originalIndex: idx
+            }));
+        }
+
+        // ভাষা পরিবর্তন
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('id') === `lang-${lang}`) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            localStorage.setItem('mcqLang', lang);
+            currentBaseQuestions = currentLang === 'en' ? baseQuestionsEn : baseQuestionsBn;
+            userNameInput.placeholder = currentLang === 'en' ? "Your name" : "আপনার নাম";
+        }
+
+        // টাইমার আপডেট
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerSpan.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // টাইমার শুরু
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (quizEnded) return;
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    updateTimerDisplay();
+                    clearInterval(timerInterval);
+                    if (!quizEnded) {
+                        endQuiz(true);
+                    }
+                }
+            }, 1000);
+        }
+
+        // স্কোর গণনা
+        function calculateScore() {
+            score = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === questions[i].answer) {
+                    score++;
+                }
+            }
+            scoreSpan.textContent = score;
+        }
+
+        // বর্তমান প্রশ্নের উত্তর দেওয়া হয়েছে কিনা
+        function isCurrentAnswered() {
+            return userAnswers[currentQuestionIndex] !== null;
+        }
+
+        // Next বাটন সক্রিয়/নিষ্ক্রিয়
+        function updateNextButton() {
+            if (quizEnded) return;
+            nextBtn.disabled = !isCurrentAnswered();
+        }
+
+        // প্রশ্ন রেন্ডার
+        function renderQuestion() {
+            if (quizEnded || questions.length === 0) return;
+            const q = questions[currentQuestionIndex];
+            questionText.textContent = q.question;
+
+            let optionsHtml = '';
+            for (let i = 0; i < q.options.length; i++) {
+                const checked = (userAnswers[currentQuestionIndex] === i) ? 'checked' : '';
+                optionsHtml += `
+                    <div class="option-item ${userAnswers[currentQuestionIndex] === i ? 'selected' : ''}" data-opt-index="${i}">
+                        <input type="radio" name="option" value="${i}" id="opt${i}" ${checked}>
+                        <label for="opt${i}" class="option-text">${q.options[i]}</label>
+                    </div>
+                `;
+            }
+            optionsContainer.innerHTML = optionsHtml;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (quizEnded) return;
+                    const optIndex = parseInt(this.getAttribute('data-opt-index'));
+                    selectOption(optIndex);
+                });
+            });
+
+            prevBtn.disabled = (currentQuestionIndex === 0);
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerHTML = `<span data-i18n="submit">Submit</span> <i class="fas fa-check-circle"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span data-i18n="next">Next</span> <i class="fas fa-arrow-right"></i>`;
+            }
+
+            updateNextButton();
+            stepSpan.textContent = currentQuestionIndex + 1;
+        }
+
+        // অপশন নির্বাচন
+        function selectOption(optIndex) {
+            if (quizEnded) return;
+            const currentAnswer = userAnswers[currentQuestionIndex];
+            if (currentAnswer === optIndex) {
+                userAnswers[currentQuestionIndex] = null;
+            } else {
+                userAnswers[currentQuestionIndex] = optIndex;
+            }
+            calculateScore();
+            renderQuestion();
+        }
+
+        // Next বাটন ক্লিক
+        function nextQuestion() {
+            if (quizEnded) return;
+            if (!isCurrentAnswered()) {
+                alert(translations[currentLang]['please_select']);
+                return;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                submitQuiz();
+            }
+        }
+
+        // Previous বাটন ক্লিক
+        function prevQuestion() {
+            if (quizEnded) return;
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // সব প্রশ্নের উত্তর দেওয়া হয়েছে কিনা
+        function allAnswered() {
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] === null) return false;
+            }
+            return true;
+        }
+
+        // কুইজ জমা দেওয়া
+        function submitQuiz() {
+            if (quizEnded) return;
+            if (!allAnswered()) {
+                alert(translations[currentLang]['answer_all']);
+                return;
+            }
+
+            quizEnded = true;
+            clearInterval(timerInterval);
+            calculateScore();
+
+            quizArea.style.display = 'none';
+            resultArea.style.display = 'block';
+
+            if (score === 5) {
+                resultTitle.innerHTML = translations[currentLang]['congrats'];
+            } else {
+                resultTitle.innerHTML = translations[currentLang]['try_again'];
+            }
+            resultSummary.innerHTML = translations[currentLang]['score_message'].replace('{score}', score);
+            resultId.innerHTML = translations[currentLang]['id_prefix'].replace('{id}', currentQuizId.substring(1));
+            resultName.innerHTML = currentUserName;
+
+            let detailsHtml = '';
+            questions.forEach((q, idx) => {
+                const userAnsIndex = userAnswers[idx];
+                const userAnsText = userAnsIndex !== null ? q.options[userAnsIndex] : 'Not answered';
+                const correctAnsText = q.options[q.answer];
+                const isCorrect = (userAnsIndex === q.answer);
+                detailsHtml += `
+                    <div class="result-item ${isCorrect ? '' : 'incorrect'}">
+                        <p class="result-question">${translations[currentLang]['question_prefix'].replace('{num}', idx+1)} ${q.question}</p>
+                        <p class="result-user">${translations[currentLang]['your_answer'].replace('{answer}', userAnsText)}</p>
+                        ${!isCorrect ? `<p class="result-correct">${translations[currentLang]['correct_answer'].replace('{answer}', correctAnsText)}</p>` : ''}
+                    </div>
+                `;
+            });
+            resultDetails.innerHTML = detailsHtml;
+        }
+
+        // সময় শেষ হলে
+        function endQuiz(timeUp = false) {
+            if (quizEnded) return;
+            quizEnded = true;
+            clearInterval(timerInterval);
+            calculateScore();
+
+            quizArea.style.display = 'none';
+            resultArea.style.display = 'block';
+
+            if (timeUp) {
+                resultTitle.innerHTML = translations[currentLang]['time_up'];
+            } else {
+                resultTitle.innerHTML = (score === 5) ? translations[currentLang]['congrats'] : translations[currentLang]['try_again'];
+            }
+            resultSummary.innerHTML = translations[currentLang]['score_message'].replace('{score}', score);
+            resultId.innerHTML = translations[currentLang]['id_prefix'].replace('{id}', currentQuizId.substring(1));
+            resultName.innerHTML = currentUserName;
+
+            let detailsHtml = '';
+            questions.forEach((q, idx) => {
+                const userAnsIndex = userAnswers[idx];
+                const userAnsText = userAnsIndex !== null ? q.options[userAnsIndex] : 'Not answered';
+                const correctAnsText = q.options[q.answer];
+                const isCorrect = (userAnsIndex === q.answer);
+                detailsHtml += `
+                    <div class="result-item ${isCorrect ? '' : 'incorrect'}">
+                        <p class="result-question">${translations[currentLang]['question_prefix'].replace('{num}', idx+1)} ${q.question}</p>
+                        <p class="result-user">${translations[currentLang]['your_answer'].replace('{answer}', userAnsText)}</p>
+                        ${!isCorrect ? `<p class="result-correct">${translations[currentLang]['correct_answer'].replace('{answer}', correctAnsText)}</p>` : ''}
+                    </div>
+                `;
+            });
+            resultDetails.innerHTML = detailsHtml;
+        }
+
+        // কুইজ শুরু - এখন নাম বাধ্যতামূলক
+        function startQuiz() {
+            const name = userNameInput.value.trim();
+            if (name === '') {
+                alert(translations[currentLang]['enter_name_alert']);
+                return;
+            }
+            currentUserName = name;
+            currentQuizId = generateQuizId();
+
+            nameForm.style.display = 'none';
+            quizArea.style.display = 'block';
+
+            quizEnded = false;
+            questions = selectRandomQuestions(5);
+            userAnswers = new Array(questions.length).fill(null);
+            currentQuestionIndex = 0;
+            timeLeft = 300;
+            updateTimerDisplay();
+            calculateScore();
+
+            if (timerInterval) clearInterval(timerInterval);
+            startTimer();
+            renderQuestion();
+        }
+
+        // রিস্টার্ট
+        function restartQuiz() {
+            nameForm.style.display = 'block';
+            quizArea.style.display = 'none';
+            resultArea.style.display = 'none';
+            userNameInput.value = '';
+
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        // DOM লোড হলে
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLang);
+
+            document.getElementById('lang-en').addEventListener('click', () => changeLanguage('en'));
+            document.getElementById('lang-bn').addEventListener('click', () => changeLanguage('bn'));
+
+            startBtn.addEventListener('click', startQuiz);
+            prevBtn.addEventListener('click', prevQuestion);
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', restartQuiz);
+        });
+    </script>
+</body>
+</html>
